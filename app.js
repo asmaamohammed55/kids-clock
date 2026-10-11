@@ -665,10 +665,18 @@ class KidsClockApp {
   }
 
   startDragging(e, hand) {
-    e.preventDefault();
+    if (e.cancelable) e.preventDefault();
     this.isDragging = true;
     this.draggedHand = hand;
     this.ensureAudioUnlocked();
+
+    if (e.target && e.target.setPointerCapture && e.pointerId) {
+      try {
+        e.target.setPointerCapture(e.pointerId);
+        this.capturedTarget = e.target;
+        this.capturedPointerId = e.pointerId;
+      } catch (_) {}
+    }
 
     if (hand === 'minute') {
       this.minuteHandGroup.classList.add('is-dragging');
@@ -726,6 +734,13 @@ class KidsClockApp {
   stopDragging() {
     if (!this.isDragging) return;
     this.isDragging = false;
+    if (this.capturedTarget && this.capturedTarget.releasePointerCapture && this.capturedPointerId) {
+      try {
+        this.capturedTarget.releasePointerCapture(this.capturedPointerId);
+      } catch (_) {}
+      this.capturedTarget = null;
+      this.capturedPointerId = null;
+    }
     this.minuteHandGroup.classList.remove('is-dragging');
     this.hourHandGroup.classList.remove('is-dragging');
   }
