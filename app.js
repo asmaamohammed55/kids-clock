@@ -1,12 +1,163 @@
 /**
  * ==============================================================================
- * جزيرة الوقت - المحرك البرمجي التفاعلي والصوتي للأطفال
- * تقنيات: Modern Vanilla JS, SVG Math, Web Audio API, Canvas Particles
+ * جزيرة الوقت - Time Island
+ * المحرك البرمجي التفاعلي والصوتي ثنائي اللغة للأطفال (عربي / English)
+ * العربية هي اللغة الافتراضية مع إمكانية التبديل الفوري بنقرة زر
  * ==============================================================================
  */
 
+const TRANSLATIONS = {
+  ar: {
+    appTitle: "جزيرة الوقت ⏰ مغامرة تعلّم الساعة للأبطال",
+    logoTitle: "جزيرة الوقت",
+    logoSubtitle: "مغامرة تعلّم الساعة للأبطال",
+    childDefaultName: "البطل",
+    partyBtn: "احتفال!",
+    soundTitle: "كتم / تفعيل الصوت",
+    tabExplore: "العب واستكشف",
+    tabLessons: "المحطات التعليمية",
+    tabQuiz: "تحدي الأبطال",
+    quizStreakLabel: "السؤال:",
+    quizSettingsBtn: "⚙️ إعداد",
+    quizMissionTag: "🎯 مهمتك يا بطل:",
+    exploreMascotDefault: "أهلاً يا بطل! أنا صديقك <strong>«تكتُك»</strong>. اسحب العقارب بإصبعك وشاهد ماذا يحدث!",
+    listenBtn: "🔊 استمع",
+    lessonChip1: "1. الساعات",
+    lessonChip2: "2. الدقائق",
+    lessonChip3: "3. تماماً",
+    lessonChip4: "4. النصف والربع",
+    lessonChip5: "5. الخمسات",
+    toggleMinutesGuide: "أرقام الدقائق (05, 10..)",
+    toggleSector: "شريحة النصف والربع",
+    hourHandText: "ساعة",
+    minuteHandText: "دقيقة",
+    digitalLabel: "الساعة الرقمية",
+    phraseLabel: "النطق بالكلمات",
+    dayPeriod: "نهاراً ☀️",
+    nightPeriod: "ليلاً 🌙",
+    checkAnswerBtn: "تحقّق من إجابتي يا تكتك!",
+    nextQuestionBtn: "السؤال التالي ⬅️",
+    newRoundBtn: "جولة تحدي جديدة بأوقات جديدة!",
+    assistBtn: "🪄 مساعدة تكتك",
+    shuffleBtn: "🔄 وقت آخر",
+    quickHour: "+1 ساعة",
+    quick30: "+30 دقيقة (نصف)",
+    quick15: "+15 دقيقة (ربع)",
+    quick5: "+5 دقائق",
+    quickNow: "الوقت الحالي الآن ⚡",
+    tip1Badge: "العقرب الأزرق",
+    tip1Text: "هو <strong>عقرب الساعات</strong>: قصير وبطيء، يخبرك في أي ساعة نحن الآن.",
+    tip2Badge: "العقرب البرتقالي",
+    tip2Text: "هو <strong>عقرب الدقائق</strong>: طويل وسريع، يخبرك كم دقيقة مرت.",
+    tip3Badge: "سر البيتزا 🍕",
+    tip3Text: "شريحة البيتزا توضح النصف والربع بتقسيم الدائرة بشكل ملون شهي!",
+    tip4Badge: "الشمس والقمر ☀️🌙",
+    tip4Text: "راقب السماء في الخلفية؛ ستشرق الشمس نهاراً وتظهر النجوم ليلاً!",
+    footerMadeBy: "صُنع بحب بواسطة",
+    engineerName: "المهندسة أسماء محمد عبد الرءوف",
+    footerQuote: "«الوقت هو أثمن ما نملك.. بالمتعة واللعب نبني عباقرة المستقبل» ⏰✨",
+    nameModalTitle: "أهلاً بك في جزيرة الوقت!",
+    nameModalDesc: "أنا صديقك <strong>«تكتُك»</strong>.. ما هو اسمك الجميل لنبدأ المغامرة معاً؟",
+    nameModalPlaceholder: "اكتب اسمك هنا (مثال: عمر، مريم، يوسف..)",
+    nameModalBtn: "انطلق في المغامرة!",
+    celebrationTitle: "ألف مبروك يا بطل الأبطال!",
+    celebrationSubtitle: "لقد أتممت الاختبار بنجاح باهر وتألقت في معرفة الوقت!",
+    summaryDoneLabel: "أسئلة منجزة",
+    summaryStarsLabel: "نجوم ذهبية",
+    summaryRatingLabel: "التقييم",
+    summaryRatingVal: "ممتاز!",
+    celebrationNewQuizBtn: "بدء اختبار جديد وتحدٍ ممتع!",
+    quizSetupTitle: "تجهيز الاختبار الجديد",
+    quizSetupDesc: "اختر تفاصيل التحدي يا بطل لتنطلق في المغامرة!",
+    setupNameLabel: "👑 اسم البطل المشارك في الاختبار:",
+    setupNamePlaceholder: "اكتب اسم البطل هنا...",
+    setupNameHint: "تأكد من اسمك لتسجيل كل نجومك وبطولاتك باسمك! ⭐",
+    setupCountLabel: "🎯 كم عدد أسئلة هذا الاختبار؟",
+    setupCountFast: "تحدي سريع ⚡",
+    setupCountRecommended: "الموصى به ⭐",
+    setupCountGenius: "تحدي العباقرة 🏆",
+    setupStartBtn: "انطلق في الاختبار الآن!",
+    langBtn: "English"
+  },
+  en: {
+    appTitle: "Time Island ⏰ Kids Clock Adventure",
+    logoTitle: "Time Island",
+    logoSubtitle: "Clock Learning Adventure",
+    childDefaultName: "Champion",
+    partyBtn: "Party!",
+    soundTitle: "Mute / Unmute Sound",
+    tabExplore: "Play & Explore",
+    tabLessons: "Learning Stations",
+    tabQuiz: "Heroes Challenge",
+    quizStreakLabel: "Question:",
+    quizSettingsBtn: "⚙️ Setup",
+    quizMissionTag: "🎯 Your Mission, Hero:",
+    exploreMascotDefault: "Hello champion! I am your friend <strong>“Tick-Tock”</strong>. Drag the clock hands with your finger and explore!",
+    listenBtn: "🔊 Listen",
+    lessonChip1: "1. Hours",
+    lessonChip2: "2. Minutes",
+    lessonChip3: "3. O'clock",
+    lessonChip4: "4. Half & Quarter",
+    lessonChip5: "5. Count by 5s",
+    toggleMinutesGuide: "Minute Numbers (05, 10..)",
+    toggleSector: "Half & Quarter Slice",
+    hourHandText: "Hour",
+    minuteHandText: "Min",
+    digitalLabel: "Digital Clock",
+    phraseLabel: "In Words",
+    dayPeriod: "Day ☀️",
+    nightPeriod: "Night 🌙",
+    checkAnswerBtn: "Check my answer, Tick-Tock!",
+    nextQuestionBtn: "Next Question ➡️",
+    newRoundBtn: "New Challenge Round with Fresh Times!",
+    assistBtn: "🪄 Tick-Tock Assist",
+    shuffleBtn: "🔄 Another Time",
+    quickHour: "+1 Hour",
+    quick30: "+30 Min (Half)",
+    quick15: "+15 Min (Quarter)",
+    quick5: "+5 Min",
+    quickNow: "Current Time Now ⚡",
+    tip1Badge: "Blue Hand",
+    tip1Text: "The <strong>Hour Hand</strong>: short & slow, tells which hour of the day it is.",
+    tip2Badge: "Orange Hand",
+    tip2Text: "The <strong>Minute Hand</strong>: long & fast, tells how many minutes passed.",
+    tip3Badge: "Pizza Secret 🍕",
+    tip3Text: "The pizza slice makes halves and quarters super easy and tasty to see!",
+    tip4Badge: "Sun & Moon ☀️🌙",
+    tip4Text: "Watch the sky: bright sun by day, glowing stars and moon by night!",
+    footerMadeBy: "Made with love by",
+    engineerName: "Eng. Asmaa Mohammed Abdelraouf",
+    footerQuote: "“Time is our greatest treasure.. through fun and play, we nurture the geniuses of tomorrow” ⏰✨",
+    nameModalTitle: "Welcome to Time Island!",
+    nameModalDesc: "I am your friend <strong>“Tick-Tock”</strong>.. What's your wonderful name so we can explore together?",
+    nameModalPlaceholder: "Type your name here (e.g. Omar, Maryam, Adam..)",
+    nameModalBtn: "Start Adventure!",
+    celebrationTitle: "Congratulations, Grand Champion!",
+    celebrationSubtitle: "You finished the challenge with flying colors and mastered the clock!",
+    summaryDoneLabel: "Completed",
+    summaryStarsLabel: "Gold Stars",
+    summaryRatingLabel: "Rating",
+    summaryRatingVal: "Superb!",
+    celebrationNewQuizBtn: "Start a Fun New Quiz!",
+    quizSetupTitle: "Prepare New Quiz",
+    quizSetupDesc: "Pick your challenge options, champion, and let's go!",
+    setupNameLabel: "👑 Hero's Name for this Quiz:",
+    setupNamePlaceholder: "Type hero name here...",
+    setupNameHint: "Double check your name to collect all your stars! ⭐",
+    setupCountLabel: "🎯 How many questions in this quiz?",
+    setupCountFast: "Quick ⚡",
+    setupCountRecommended: "Recommended ⭐",
+    setupCountGenius: "Genius 🏆",
+    setupStartBtn: "Launch Quiz Now!",
+    langBtn: "عربي"
+  }
+};
+
 class KidsClockApp {
   constructor() {
+    // اللغة المختارة (العربية هي الافتراضية دائماً كما طُلب)
+    this.currentLang = localStorage.getItem('kids_clock_lang') || 'ar';
+
     // الحالة الأساسية للتطبيق
     this.currentHours = 12;
     this.currentMinutes = 0;
@@ -16,6 +167,7 @@ class KidsClockApp {
     this.activeMode = 'explore'; // 'explore' | 'lessons' | 'quiz'
     this.isDayTime = true; // حالة النهار ☀️ أو الليل 🌙
     this.childName = localStorage.getItem('kids_clock_child_name') || ''; // اسم الطفل المحفوظ
+    this.currentLessonId = 1;
 
     // حالة السحب والتحريك
     this.isDragging = false;
@@ -38,6 +190,9 @@ class KidsClockApp {
     // ربط عناصر DOM
     this.bindDOMElements();
 
+    // تطبيق اللغة وتحديث النصوص الأولية
+    this.applyLanguage();
+
     // بناء رسوم الساعة (الأرقام والشرطات التناظرية)
     this.generateClockFaceElements();
 
@@ -55,7 +210,10 @@ class KidsClockApp {
     // تهيئة اسم الطفل وعرض نافذة الترحيب
     if (this.childName) {
       this.childNameDisplay.textContent = this.childName;
-      this.setMascotMessage(`أهلاً بعودتك يا بطلنا <strong>«${this.childName}»</strong>! أنا صديقك تكتك، جاهز لمغامرة اليوم؟`);
+      const welcome = this.currentLang === 'ar'
+        ? `أهلاً بعودتك يا بطلنا <strong>«${this.childName}»</strong>! أنا صديقك تكتك، جاهز لمغامرة اليوم؟`
+        : `Welcome back, champion <strong>"${this.childName}"</strong>! I'm your friend Tick-Tock, ready for today's adventure?`;
+      this.setMascotMessage(welcome);
     } else {
       setTimeout(() => this.openNameModal(), 450);
     }
@@ -216,31 +374,42 @@ class KidsClockApp {
     osc.stop(this.audioCtx.currentTime + 0.26);
   }
 
-  // النطق الصوتي العربي باستخدام محرك نطق المتصفح
-  speakArabic(text) {
+  // النطق الصوتي بلغتين (العربية والإنجليزية)
+  speakText(text) {
     if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel(); // إلغاء أي جمل سابقة
+    window.speechSynthesis.cancel();
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'ar-SA';
-    utterance.rate = 0.9; // سرعة نطق مناسبة للأطفال
-    utterance.pitch = 1.2; // نبرة مرحة
+    const cleanText = text.replace(/<[^>]*>/g, '');
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = this.currentLang === 'ar' ? 'ar-SA' : 'en-US';
+    utterance.rate = 0.9;
+    utterance.pitch = 1.15;
     window.speechSynthesis.speak(utterance);
+  }
+
+  speakArabic(text) {
+    this.speakText(text);
   }
 
   /* --------------------------------------------------------------------------
      2. ربط عناصر واجهة المستخدم DOM
      -------------------------------------------------------------------------- */
   bindDOMElements() {
+    this.langToggleBtn = document.getElementById('langToggleBtn');
+    this.currentLangLabel = document.getElementById('currentLangLabel');
+
     this.svgClock = document.getElementById('interactiveClock');
     this.hourHandGroup = document.getElementById('hourHandGroup');
     this.minuteHandGroup = document.getElementById('minuteHandGroup');
+    this.hourHandText = document.getElementById('hourHandText');
+    this.minuteHandText = document.getElementById('minuteHandText');
     this.pieSlice = document.getElementById('pieSlice');
 
     this.digitalHours = document.getElementById('digitalHours');
     this.digitalMinutes = document.getElementById('digitalMinutes');
     this.digitalPeriod = document.getElementById('digitalPeriod');
     this.arabicPhrase = document.getElementById('arabicTimePhrase');
+    this.phraseLabel = document.getElementById('phraseLabel');
     this.skyBg = document.getElementById('skyBg');
 
     this.speechText = document.getElementById('speechText');
@@ -309,12 +478,87 @@ class KidsClockApp {
   }
 
   /* --------------------------------------------------------------------------
+     إدارة وتطبيق اللغة (i18n)
+     -------------------------------------------------------------------------- */
+  toggleLanguage() {
+    this.currentLang = this.currentLang === 'ar' ? 'en' : 'ar';
+    localStorage.setItem('kids_clock_lang', this.currentLang);
+    this.applyLanguage();
+    this.playTickSound();
+  }
+
+  applyLanguage() {
+    const lang = this.currentLang;
+    const t = TRANSLATIONS[lang];
+
+    // تحديث خصائص المستند (الاتجاه واللغة والعنوان)
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.title = t.appTitle;
+
+    // تحديث زر اللغة
+    if (this.currentLangLabel) {
+      this.currentLangLabel.textContent = t.langBtn;
+    }
+
+    // تحديث كافة العناصر التي تحمل data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (t[key]) {
+        el.innerHTML = t[key];
+      }
+    });
+
+    // تحديث نصوص حقول الإدخال والـ Placeholders
+    if (this.childNameInput) {
+      this.childNameInput.placeholder = t.nameModalPlaceholder;
+    }
+    if (this.setupPlayerNameInput) {
+      this.setupPlayerNameInput.placeholder = t.setupNamePlaceholder;
+    }
+
+    // تحديث علامات عقارب الساعة
+    if (this.hourHandText) this.hourHandText.textContent = t.hourHandText;
+    if (this.minuteHandText) this.minuteHandText.textContent = t.minuteHandText;
+
+    // تحديث اسم الطفل الافتراضي إذا لم يُدخل اسماً بعد
+    if (!this.childName || this.childName === 'البطل' || this.childName === 'Champion') {
+      this.childNameDisplay.textContent = t.childDefaultName;
+    }
+
+    // تحديث نطق وصياغة الوقت الحالي
+    this.setTime(this.currentHours, this.currentMinutes, false);
+    this.updateSkyAndPeriod();
+
+    // تحديث المحتوى بحسب النمط الحالي النشط
+    if (this.activeMode === 'quiz') {
+      if (this.quizQuestions && this.quizQuestions[this.currentQuizIndex]) {
+        this.loadQuizQuestion(this.currentQuizIndex);
+      }
+    } else if (this.activeMode === 'lessons') {
+      this.runLesson(this.currentLessonId || 1);
+    } else {
+      const name = this.childName || t.childDefaultName;
+      if (lang === 'ar') {
+        this.setMascotMessage(`أهلاً يا ${name}! أنا صديقك <strong>«تكتُك»</strong>. اسحب العقارب بإصبعك وشاهد ماذا يحدث!`);
+      } else {
+        this.setMascotMessage(`Hello ${name}! I'm your friend <strong>“Tick-Tock”</strong>. Drag the clock hands with your finger and explore!`);
+      }
+    }
+  }
+
+  /* --------------------------------------------------------------------------
      3. توليد علامات وأرقام الساعة التناظرية ديناميكياً بـ SVG
      -------------------------------------------------------------------------- */
   generateClockFaceElements() {
     const ticksGroup = document.getElementById('minuteTicks');
     const numbersGroup = document.getElementById('hourNumbers');
     const guidesGroup = document.getElementById('minuteNumbersGuide');
+
+    if (!ticksGroup || !numbersGroup || !guidesGroup) return;
+    ticksGroup.innerHTML = '';
+    numbersGroup.innerHTML = '';
+    guidesGroup.innerHTML = '';
 
     // توليد 60 شرطة دقيقة
     for (let i = 0; i < 60; i++) {
@@ -370,6 +614,11 @@ class KidsClockApp {
      4. التحكم بزوايا العقارب والسحب التفاعلي الدقيق
      -------------------------------------------------------------------------- */
   attachEventListeners() {
+    // تبديل اللغة
+    if (this.langToggleBtn) {
+      this.langToggleBtn.addEventListener('click', () => this.toggleLanguage());
+    }
+
     // التفاعل مع سحب العقارب (يدعم الماوس واللمس على الهواتف والأجهزة اللوحية)
     const startDragMinute = (e) => this.startDragging(e, 'minute');
     const startDragHour = (e) => this.startDragging(e, 'hour');
@@ -392,7 +641,10 @@ class KidsClockApp {
     document.getElementById('btnNowTime').addEventListener('click', () => {
       const now = new Date();
       this.setTime(now.getHours() % 12 || 12, now.getMinutes(), true);
-      this.setMascotMessage('اضبطنا الساعة الآن على الوقت الحقيقي الجميل!');
+      const msg = this.currentLang === 'ar'
+        ? 'اضبطنا الساعة الآن على الوقت الحقيقي الجميل!'
+        : 'Clock is now set to real current time! ⚡';
+      this.setMascotMessage(msg);
     });
 
     // أزرار التبديل والمساعدة
@@ -421,24 +673,34 @@ class KidsClockApp {
       this.isDayTime = !this.isDayTime;
       this.updateSkyAndPeriod();
       this.playTickSound();
-      this.setMascotMessage(this.isDayTime ? 'أشرقت الشمس الجميلة! صباح الخير والنشاط! ☀️' : 'حل الليل الهادئ وظهر القمر والنجوم! 🌙');
+      const msg = this.isDayTime
+        ? (this.currentLang === 'ar' ? 'أشرقت الشمس الجميلة! صباح الخير والنشاط! ☀️' : 'Bright sunny day! Good morning, champion! ☀️')
+        : (this.currentLang === 'ar' ? 'حل الليل الهادئ وظهر القمر والنجوم! 🌙' : 'Peaceful starry night! Moon and stars are shining! 🌙');
+      this.setMascotMessage(msg);
     });
 
     // نطق الكلام عند الضغط على زر استمع أو شخصية تكتك
     this.speakButton.addEventListener('click', () => {
       const phrase = this.speechText.textContent;
-      this.speakArabic(phrase);
+      this.speakText(phrase);
     });
 
     this.mascotAvatar.addEventListener('click', () => {
-      const name = this.childName || 'يا بطل';
-      const phrases = [
+      const name = this.childName || (this.currentLang === 'ar' ? 'يا بطل' : 'Hero');
+      const phrasesAr = [
         `أنت ذكي جداً ومميز يا ${name}! 🌟`,
         `تذكر يا ${name}: العقرب القصير للساعات، والطويل للدقائق!`,
         `تيك توك.. أنا فخور جداً بتعلمك السريع يا ${name}! ⏰`,
         `أحسنت الاستكشاف يا بطلنا ${name}! استمر هكذا! 🚀`
       ];
-      const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+      const phrasesEn = [
+        `You are super smart and amazing, ${name}! 🌟`,
+        `Remember ${name}: Short hand is for hours, long hand is for minutes!`,
+        `Tick-Tock.. I am so proud of your quick learning, ${name}! ⏰`,
+        `Great exploration, ${name}! Keep going! 🚀`
+      ];
+      const pool = this.currentLang === 'ar' ? phrasesAr : phrasesEn;
+      const randomPhrase = pool[Math.floor(Math.random() * pool.length)];
       this.setMascotMessage(randomPhrase);
       this.playTickSound();
     });
@@ -476,15 +738,13 @@ class KidsClockApp {
     this.nextQuestionBtn.addEventListener('click', () => this.nextQuizQuestion());
     this.newRoundBtn.addEventListener('click', () => this.openQuizSetupModal());
     this.shuffleQuestionBtn.addEventListener('click', () => this.shuffleCurrentQuestion());
-    
-    // زر إعداد وتجهيز الاختبار داخل لوحة الكويز
+
     if (this.btnRestartQuizSetup) {
       this.btnRestartQuizSetup.addEventListener('click', () => {
         this.openQuizSetupModal();
       });
     }
 
-    // زر بدء اختبار جديد من نافذة التهنئة
     if (this.startNewQuizFromPopupBtn) {
       this.startNewQuizFromPopupBtn.addEventListener('click', () => {
         this.grandCelebrationModal.classList.remove('active');
@@ -492,7 +752,6 @@ class KidsClockApp {
       });
     }
 
-    // الضغط على Enter في حقل اسم البطل لبدء الاختبار فوراً
     if (this.setupPlayerNameInput) {
       this.setupPlayerNameInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
@@ -512,21 +771,18 @@ class KidsClockApp {
       });
     });
 
-    // زر الانطلاق في الاختبار بعد الإعداد
     if (this.launchConfiguredQuizBtn) {
       this.launchConfiguredQuizBtn.addEventListener('click', () => {
         this.launchConfiguredQuiz();
       });
     }
 
-    // زر تجربة الاحتفال المباشر فوراً
     if (this.testCelebrationBtn) {
       this.testCelebrationBtn.addEventListener('click', () => {
         this.triggerGrandCelebration();
       });
     }
 
-    // زر المساعدة الذكية في ضبط العقارب
     if (this.autoSetClockBtn) {
       this.autoSetClockBtn.addEventListener('click', () => {
         this.autoSolveForChild();
@@ -564,7 +820,6 @@ class KidsClockApp {
       }
     });
 
-    // إغلاق النوافذ عبر زر Esc
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         if (this.grandCelebrationModal) this.grandCelebrationModal.classList.remove('active');
@@ -573,7 +828,7 @@ class KidsClockApp {
       }
     });
 
-    // فتح قفل الصوت فوراً عند أي لمسة أو نقرة على الصفحة
+    // فتح قفل الصوت فوراً عند أي لمسة أو نقرة
     const unlockAudio = () => {
       this.ensureAudioUnlocked();
       window.removeEventListener('pointerdown', unlockAudio);
@@ -589,7 +844,8 @@ class KidsClockApp {
      إدارة اسم الطفل والنافذة الترحيبية
      -------------------------------------------------------------------------- */
   openNameModal() {
-    this.childNameInput.value = (this.childName && this.childName !== 'البطل') ? this.childName : '';
+    const isDef = !this.childName || this.childName === 'البطل' || this.childName === 'Champion';
+    this.childNameInput.value = isDef ? '' : this.childName;
     this.nameModalOverlay.classList.add('active');
     setTimeout(() => this.childNameInput.focus(), 250);
     this.playTickSound();
@@ -601,33 +857,38 @@ class KidsClockApp {
 
   handleSaveName() {
     const entered = this.childNameInput.value.trim();
-    this.childName = entered || 'البطل';
+    const defaultName = TRANSLATIONS[this.currentLang].childDefaultName;
+    this.childName = entered || defaultName;
     localStorage.setItem('kids_clock_child_name', this.childName);
     this.childNameDisplay.textContent = this.childName;
     this.closeNameModal();
 
     this.playCelebrationFanfare();
-    this.triggerConfetti();
+    this.triggerConfetti('center', 90);
 
-    const welcomeMsg = `أهلاً وسهلاً يا بطلنا الرائع <strong>«${this.childName}»</strong>! أنا سعيد جداً بصداقتك في جزيرة الوقت! 🌟`;
+    const welcomeMsg = this.currentLang === 'ar'
+      ? `أهلاً وسهلاً يا بطلنا الرائع <strong>«${this.childName}»</strong>! أنا سعيد جداً بصداقتك في جزيرة الوقت! 🌟`
+      : `Welcome, awesome champion <strong>"${this.childName}"</strong>! I'm so thrilled to be friends on Time Island! 🌟`;
     this.setMascotMessage(welcomeMsg);
-    this.speakArabic(`أهلاً يا ${this.childName}! هيا نبدأ مغامرة تعلّم الساعة معاً!`);
+    this.speakText(this.currentLang === 'ar'
+      ? `أهلاً يا ${this.childName}! هيا نبدأ مغامرة تعلّم الساعة معاً!`
+      : `Hello ${this.childName}! Let's start learning the clock together!`
+    );
   }
 
   /* --------------------------------------------------------------------------
      إدارة نافذة إعداد الاختبار الجديد
      -------------------------------------------------------------------------- */
   openQuizSetupModal() {
-    // ملء اسم الطفل الحالي في حقل الإدخال ليراه بوضوح أو يُعدله
+    const isDef = !this.childName || this.childName === 'البطل' || this.childName === 'Champion';
     if (this.setupPlayerNameInput) {
-      this.setupPlayerNameInput.value = (this.childName && this.childName !== 'البطل') ? this.childName : '';
+      this.setupPlayerNameInput.value = isDef ? '' : this.childName;
       setTimeout(() => {
         this.setupPlayerNameInput.focus();
         this.setupPlayerNameInput.select();
       }, 250);
     }
 
-    // تفعيل خيار عدد الأسئلة الحالي
     document.querySelectorAll('.count-option-btn').forEach(btn => {
       const c = parseInt(btn.getAttribute('data-count'), 10);
       btn.classList.toggle('active', c === this.quizQuestionsCount);
@@ -640,7 +901,6 @@ class KidsClockApp {
   }
 
   launchConfiguredQuiz() {
-    // التحقق هل تم إدخال اسم أو تعديل الاسم
     const entered = this.setupPlayerNameInput ? this.setupPlayerNameInput.value.trim() : '';
     if (entered) {
       this.childName = entered;
@@ -649,20 +909,24 @@ class KidsClockApp {
         this.childNameDisplay.textContent = this.childName;
       }
     } else if (!this.childName) {
-      this.childName = 'البطل';
+      this.childName = TRANSLATIONS[this.currentLang].childDefaultName;
     }
 
     if (this.quizSetupModal) {
       this.quizSetupModal.classList.remove('active');
     }
 
-    // الانتقال للوحة الاختبار وبدء الأسئلة بعددها المختار
     this.switchMode('quiz', false);
     this.startNewQuizRound(this.quizQuestionsCount);
 
-    const name = this.childName || 'يا بطل';
-    this.setMascotMessage(`انطلق اختبار الـ ${this.quizQuestionsCount} أسئلة يا ${name}! 🚀 هيا ركز وأرنا شطارتك!`);
-    this.speakArabic(`هيا يا ${name}! لنبدأ اختبار الـ ${this.quizQuestionsCount} أسئلة!`);
+    const name = this.childName;
+    if (this.currentLang === 'ar') {
+      this.setMascotMessage(`انطلق اختبار الـ ${this.quizQuestionsCount} أسئلة يا ${name}! 🚀 هيا ركز وأرنا شطارتك!`);
+      this.speakText(`هيا يا ${name}! لنبدأ اختبار الـ ${this.quizQuestionsCount} أسئلة!`);
+    } else {
+      this.setMascotMessage(`The ${this.quizQuestionsCount}-question quiz has started, ${name}! 🚀 Focus and show your skills!`);
+      this.speakText(`Let's go ${name}! Starting your ${this.quizQuestionsCount}-question quiz!`);
+    }
   }
 
   startDragging(e, hand) {
@@ -689,7 +953,6 @@ class KidsClockApp {
   handlePointerMove(e) {
     if (!this.isDragging) return;
 
-    // حساب إحداثيات المؤشر بالنسبة لمركز دائرة الـ SVG
     const rect = this.svgClock.getBoundingClientRect();
     const clientX = e.clientX;
     const clientY = e.clientY;
@@ -700,29 +963,23 @@ class KidsClockApp {
     const deltaX = clientX - clockCenterX;
     const deltaY = clientY - clockCenterY;
 
-    // حساب الزاوية بالدرجات (0 درجة تشير للأعلى = 12)
     let angleRad = Math.atan2(deltaX, -deltaY);
     let angleDeg = angleRad * (180 / Math.PI);
     if (angleDeg < 0) angleDeg += 360;
 
     if (this.draggedHand === 'minute') {
-      // 360 درجة = 60 دقيقة => 6 درجات لكل دقيقة
       let minute = Math.round(angleDeg / 6) % 60;
       if (minute !== this.currentMinutes) {
-        // إذا دار عقرب الدقائق وقطع الـ 12 للأمام أو الخلف
         const diff = minute - this.currentMinutes;
         if (diff < -30) {
-          // تقدم من 59 إلى 0
           this.currentHours = (this.currentHours % 12) + 1;
         } else if (diff > 30) {
-          // رجع من 0 إلى 59
           this.currentHours = this.currentHours === 1 ? 12 : this.currentHours - 1;
         }
         this.setTime(this.currentHours, minute, false);
         this.playTickSound();
       }
     } else if (this.draggedHand === 'hour') {
-      // 360 درجة = 12 ساعة => 30 درجة لكل ساعة
       let rawHour = Math.round(angleDeg / 30);
       let hour = rawHour === 0 ? 12 : rawHour;
       if (hour !== this.currentHours) {
@@ -767,13 +1024,9 @@ class KidsClockApp {
     this.currentHours = hours;
     this.currentMinutes = minutes;
 
-    // حساب زاوية عقرب الدقائق (6 درجات لكل دقيقة)
     const minuteAngle = minutes * 6;
-
-    // حساب زاوية عقرب الساعات (30 درجة لكل ساعة + 0.5 درجة لكل دقيقة ليكون واقعياً)
     const hourAngle = ((hours % 12) * 30) + (minutes * 0.5);
 
-    // تدوير العقارب
     this.minuteHandGroup.style.transform = `rotate(${minuteAngle}deg)`;
     this.hourHandGroup.style.transform = `rotate(${hourAngle}deg)`;
 
@@ -781,18 +1034,16 @@ class KidsClockApp {
     this.digitalHours.textContent = hours.toString().padStart(2, '0');
     this.digitalMinutes.textContent = minutes.toString().padStart(2, '0');
 
-    // تحديث الصياغة اللغوية بالعربية
-    const arabicText = this.convertTimeToArabicPhrase(hours, minutes);
-    this.arabicPhrase.textContent = arabicText;
+    // تحديث الصياغة اللغوية بحسب اللغة الحالية
+    this.arabicPhrase.textContent = this.getTimePhrase(hours, minutes);
 
     // تحديث شريحة البيتزا إذا كانت مفعلة
     this.updatePizzaSlice();
 
-    // تحديث السماء (الليل / النهار)
+    // تحديث السماء
     this.updateSkyAndPeriod();
   }
 
-  // رسم شريحة قطاع الدقائق (مثل البيتزا)
   updatePizzaSlice() {
     if (!this.showPizzaSector || this.currentMinutes === 0) {
       this.pieSlice.setAttribute('d', '');
@@ -802,7 +1053,7 @@ class KidsClockApp {
     const angle = (this.currentMinutes * 6) * (Math.PI / 180);
     const radius = 160;
     const startX = 200;
-    const startY = 40; // عند الـ 12 تماماً
+    const startY = 40;
     const endX = 200 + radius * Math.sin(angle);
     const endY = 200 - radius * Math.cos(angle);
 
@@ -811,16 +1062,23 @@ class KidsClockApp {
     this.pieSlice.setAttribute('d', pathD);
   }
 
-  // تحديث السماء والضوء الخارجي بحسب الوقت
   updateSkyAndPeriod() {
-    this.digitalPeriod.textContent = this.isDayTime ? 'نهاراً ☀️' : 'ليلاً 🌙';
+    const t = TRANSLATIONS[this.currentLang];
+    this.digitalPeriod.textContent = this.isDayTime ? t.dayPeriod : t.nightPeriod;
     document.body.classList.remove('night-mode', 'sunset-mode');
     if (!this.isDayTime) {
       document.body.classList.add('night-mode');
     }
   }
 
-  // محول الوقت الرقمي إلى عبارات عربية فصيحة وممتعة للطفل
+  getTimePhrase(hours, minutes) {
+    if (this.currentLang === 'en') {
+      return this.convertTimeToEnglishPhrase(hours, minutes);
+    }
+    return this.convertTimeToArabicPhrase(hours, minutes);
+  }
+
+  // محول الوقت إلى عبارات عربية فصيحة
   convertTimeToArabicPhrase(hours, minutes) {
     const arabicHourNames = [
       '', 'الواحدة', 'الثانية', 'الثالثة', 'الرابعة', 'الخامسة', 
@@ -861,6 +1119,46 @@ class KidsClockApp {
     }
   }
 
+  // محول الوقت إلى عبارات إنجليزية واضحة
+  convertTimeToEnglishPhrase(hours, minutes) {
+    const englishHourNames = [
+      '', 'One', 'Two', 'Three', 'Four', 'Five', 
+      'Six', 'Seven', 'Eight', 'Nine', 'Ten', 
+      'Eleven', 'Twelve'
+    ];
+    const currentHourName = englishHourNames[hours] || '';
+    const nextHour = (hours % 12) + 1;
+    const nextHourName = englishHourNames[nextHour];
+
+    if (minutes === 0) {
+      return `${currentHourName} o'clock 🔔`;
+    } else if (minutes === 5) {
+      return `Five past ${currentHourName} 🐇`;
+    } else if (minutes === 10) {
+      return `Ten past ${currentHourName}`;
+    } else if (minutes === 15) {
+      return `Quarter past ${currentHourName} 🍕`;
+    } else if (minutes === 20) {
+      return `Twenty past ${currentHourName}`;
+    } else if (minutes === 25) {
+      return `Twenty-five past ${currentHourName}`;
+    } else if (minutes === 30) {
+      return `Half past ${currentHourName} ⏱️`;
+    } else if (minutes === 35) {
+      return `Twenty-five to ${nextHourName}`;
+    } else if (minutes === 40) {
+      return `Twenty to ${nextHourName}`;
+    } else if (minutes === 45) {
+      return `Quarter to ${nextHourName} 🍕`;
+    } else if (minutes === 50) {
+      return `Ten to ${nextHourName}`;
+    } else if (minutes === 55) {
+      return `Five to ${nextHourName}`;
+    } else {
+      return `${currentHourName} : ${minutes.toString().padStart(2, '0')}`;
+    }
+  }
+
   setMascotMessage(message) {
     this.speechText.innerHTML = message;
   }
@@ -883,9 +1181,15 @@ class KidsClockApp {
     this.playTickSound();
 
     if (mode === 'explore') {
-      this.setMascotMessage('اسحب العقارب بحرية وشاهد كيف يتغير نطق الساعة وشكلها الرقمي!');
+      const msg = this.currentLang === 'ar'
+        ? 'اسحب العقارب بحرية وشاهد كيف يتغير نطق الساعة وشكلها الرقمي!'
+        : 'Drag the hands freely and see how the time changes in numbers and words!';
+      this.setMascotMessage(msg);
     } else if (mode === 'lessons') {
-      this.setMascotMessage('اختر محطة تعليمية من القائمة لنبدأ مغامرة تعلم جديدة خطوة بخطوة!');
+      const msg = this.currentLang === 'ar'
+        ? 'اختر محطة تعليمية من القائمة لنبدأ مغامرة تعلم جديدة خطوة بخطوة!'
+        : 'Pick a station from above to start our step-by-step learning adventure!';
+      this.setMascotMessage(msg);
       this.runLesson(1);
     } else if (mode === 'quiz') {
       if (triggerSetup) {
@@ -902,54 +1206,88 @@ class KidsClockApp {
 
   /* تشغيل محطات التعلم التفاعلية */
   runLesson(lessonId) {
+    this.currentLessonId = lessonId;
     this.playChimeSound();
     const lessonTitleEl = document.getElementById('activeLessonTitle');
     const lessonDescEl = document.getElementById('activeLessonDesc');
 
-    switch (lessonId) {
-      case 1:
-        this.setTime(3, 0);
-        if (lessonTitleEl) lessonTitleEl.textContent = 'المحطة 1: عقرب الساعات (الأزرق القصير)';
-        if (lessonDescEl) lessonDescEl.innerHTML = 'تعرف على العقرب الأزرق القصير والبطيء كالسّلحفاة الذي يدور بهدوء ويخبرنا بالساعة الحالية.';
-        this.setMascotMessage('👀 راقب <strong>العقرب الأزرق القصير</strong>، هو عقرب الساعات! يدور ببطء ويشير الآن إلى الرقم 3.');
-        break;
-      case 2:
-        this.setTime(12, 15);
-        if (lessonTitleEl) lessonTitleEl.textContent = 'المحطة 2: عقرب الدقائق (البرتقالي السريع)';
-        if (lessonDescEl) lessonDescEl.innerHTML = 'العقرب البرتقالي طويل ونشيط كالأرنب، يكمل دورة كاملة مدتها 60 دقيقة في كل ساعة!';
-        this.setMascotMessage('⚡ راقب <strong>العقرب البرتقالي الطويل</strong>، هو عقرب الدقائق السريع! يكمل دورة كاملة كل 60 دقيقة.');
-        break;
-      case 3:
-        this.setTime(5, 0);
-        if (lessonTitleEl) lessonTitleEl.textContent = 'المحطة 3: الساعة تماماً (عند الرقم 12)';
-        if (lessonDescEl) lessonDescEl.innerHTML = 'عندما يقف العقرب البرتقالي الطويل على 12 بالضبط في الأعلى، تكون الدقائق صفر والساعة تماماً :00!';
-        this.setMascotMessage('🔔 عندما يقف العقرب الطويل عند <strong>12</strong>، تكون الساعة <strong>تماماً</strong> (هنا الساعة 5:00 تماماً).');
-        break;
-      case 4:
-        this.showPizzaSector = true;
-        this.toggleSectorBtn.classList.add('active');
-        this.setTime(4, 30);
-        if (lessonTitleEl) lessonTitleEl.textContent = 'المحطة 4: نصف الساعة والربع (شريحة البيتزا)';
-        if (lessonDescEl) lessonDescEl.innerHTML = 'الرقم 6 يعني نصف ساعة (:30 دقيقة)، والرقم 3 يعني ربع ساعة (:15 دقيقة) تماماً كشريحة بيتزا!';
-        this.setMascotMessage('🍕 عندما يقف العقرب الطويل عند <strong>6</strong>، تكون الساعة <strong>والنصف (:30)</strong> لأنها تقسم الدائرة إلى نصفين متساويين!');
-        break;
-      case 5:
-        this.showMinuteGuides = true;
-        this.toggleMinutesGuideBtn.classList.add('active');
-        document.getElementById('minuteNumbersGuide').style.display = 'block';
-        this.setTime(8, 20);
-        if (lessonTitleEl) lessonTitleEl.textContent = 'المحطة 5: قفزات الأرنب الخماسية (5، 10، 15..)';
-        if (lessonDescEl) lessonDescEl.innerHTML = 'بين كل رقم وسابقه 5 دقائق كاملة! اضرب الرقم في 5 (مثلاً 4 × 5 = 20 دقيقة) لتعرف الدقائق بسرعة.';
-        this.setMascotMessage('🦘 قفزات الأرنب: كل رقم يساوي 5 دقائق! الرقم 1 = 5، الرقم 2 = 10، الرقم 3 = 15، والرقم 4 = 20 دقيقة!');
-        break;
+    const lessonsData = {
+      1: {
+        time: [3, 0],
+        titleAr: 'المحطة 1: عقرب الساعات (الأزرق القصير)',
+        descAr: 'تعرف على العقرب الأزرق القصير والبطيء كالسّلحفاة الذي يدور بهدوء ويخبرنا بالساعة الحالية.',
+        msgAr: '👀 راقب <strong>العقرب الأزرق القصير</strong>، هو عقرب الساعات! يدور ببطء ويشير الآن إلى الرقم 3.',
+        titleEn: 'Station 1: Hour Hand (Short Blue)',
+        descEn: 'Meet the short blue hour hand, calm and slow like a turtle, pointing to the current hour.',
+        msgEn: '👀 Watch the <strong>short blue hand</strong>, that is the hour hand! It moves slowly and points to 3 now.'
+      },
+      2: {
+        time: [12, 15],
+        titleAr: 'المحطة 2: عقرب الدقائق (البرتقالي السريع)',
+        descAr: 'العقرب البرتقالي طويل ونشيط كالأرنب، يكمل دورة كاملة مدتها 60 دقيقة في كل ساعة!',
+        msgAr: '⚡ راقب <strong>العقرب البرتقالي الطويل</strong>، هو عقرب الدقائق السريع! يكمل دورة كاملة كل 60 دقيقة.',
+        titleEn: 'Station 2: Minute Hand (Fast Orange)',
+        descEn: 'The long orange minute hand is energetic like a bunny, completing a 60-minute loop every hour!',
+        msgEn: '⚡ Watch the <strong>long orange hand</strong>, the fast minute hand! It completes a full lap every 60 minutes.'
+      },
+      3: {
+        time: [5, 0],
+        titleAr: 'المحطة 3: الساعة تماماً (عند الرقم 12)',
+        descAr: 'عندما يقف العقرب البرتقالي الطويل على 12 بالضبط في الأعلى، تكون الدقائق صفر والساعة تماماً :00!',
+        msgAr: '🔔 عندما يقف العقرب الطويل عند <strong>12</strong>، تكون الساعة <strong>تماماً</strong> (هنا الساعة 5:00 تماماً).',
+        titleEn: "Station 3: O'clock Exactly (At 12)",
+        descEn: 'When the long orange hand points straight up at 12, minutes are zero and it is o\'clock :00!',
+        msgEn: '🔔 When the long hand points to <strong>12</strong>, it is exactly <strong>o\'clock</strong> (here 5:00 o\'clock).'
+      },
+      4: {
+        time: [4, 30],
+        pizza: true,
+        titleAr: 'المحطة 4: نصف الساعة والربع (شريحة البيتزا)',
+        descAr: 'الرقم 6 يعني نصف ساعة (:30 دقيقة)، والرقم 3 يعني ربع ساعة (:15 دقيقة) تماماً كشريحة بيتزا!',
+        msgAr: '🍕 عندما يقف العقرب الطويل عند <strong>6</strong>، تكون الساعة <strong>والنصف (:30)</strong> لأنها تقسم الدائرة إلى نصفين متساويين!',
+        titleEn: 'Station 4: Half Past & Quarter Past (Pizza Slice)',
+        descEn: 'Number 6 means half an hour (:30 mins), and 3 means quarter of an hour (:15 mins) just like pizza slices!',
+        msgEn: '🍕 When the long hand points to <strong>6</strong>, it is <strong>half past (:30)</strong> splitting the clock in half!'
+      },
+      5: {
+        time: [8, 20],
+        guides: true,
+        titleAr: 'المحطة 5: قفزات الأرنب الخماسية (5، 10، 15..)',
+        descAr: 'بين كل رقم وسابقه 5 دقائق كاملة! اضرب الرقم في 5 (مثلاً 4 × 5 = 20 دقيقة) لتعرف الدقائق بسرعة.',
+        msgAr: '🦘 قفزات الأرنب: كل رقم يساوي 5 دقائق! الرقم 1 = 5، الرقم 2 = 10، الرقم 3 = 15، والرقم 4 = 20 دقيقة!',
+        titleEn: 'Station 5: Bunny Hops by 5s (5, 10, 15..)',
+        descEn: 'Between every number lies 5 minutes! Multiply the number by 5 (e.g. 4 × 5 = 20) to find minutes quickly.',
+        msgEn: '🦘 Bunny hops: Each number counts 5 minutes! 1 = 5, 2 = 10, 3 = 15, and 4 = 20 minutes!'
+      }
+    };
+
+    const lesson = lessonsData[lessonId] || lessonsData[1];
+    if (lesson.pizza) {
+      this.showPizzaSector = true;
+      this.toggleSectorBtn.classList.add('active');
+    }
+    if (lesson.guides) {
+      this.showMinuteGuides = true;
+      this.toggleMinutesGuideBtn.classList.add('active');
+      document.getElementById('minuteNumbersGuide').style.display = 'block';
+    }
+
+    this.setTime(lesson.time[0], lesson.time[1]);
+
+    if (this.currentLang === 'ar') {
+      if (lessonTitleEl) lessonTitleEl.textContent = lesson.titleAr;
+      if (lessonDescEl) lessonDescEl.innerHTML = lesson.descAr;
+      this.setMascotMessage(lesson.msgAr);
+    } else {
+      if (lessonTitleEl) lessonTitleEl.textContent = lesson.titleEn;
+      if (lessonDescEl) lessonDescEl.innerHTML = lesson.descEn;
+      this.setMascotMessage(lesson.msgEn);
     }
   }
 
   /* --------------------------------------------------------------------------
-     7. محرك التحديات والاختبارات الحماسية والمتجددة عشوائياً
+     7. محرك التحديات والاختبارات الحماسية والمتجددة عشوائياً (عربي / إنجليزي)
      -------------------------------------------------------------------------- */
-  
-  // توليد أسئلة عشوائية ذكية متدرجة الصعوبة لا تتكرر
   generateRandomQuizQuestions(count = 5) {
     const questions = [];
     const usedTimes = new Set();
@@ -959,14 +1297,18 @@ class KidsClockApp {
       'السادسة', 'السابعة', 'الثامنة', 'التاسعة', 'العاشرة', 
       'الحادية عشرة', 'الثانية عشرة'
     ];
+    const englishHourNames = [
+      '', 'One', 'Two', 'Three', 'Four', 'Five', 
+      'Six', 'Seven', 'Eight', 'Nine', 'Ten', 
+      'Eleven', 'Twelve'
+    ];
 
-    // باقات الدقائق المتدرجة لتغطية كل مفاهيم الساعة
     const minuteBuckets = [
-      [0],                           // تماماً (الساعات الكاملة)
-      [30],                          // والنصف
-      [15, 45],                      // الربع وإلا ربع
-      [10, 20, 40, 50],              // عشرات وأثلاث
-      [5, 25, 35, 55]                // قفزات الخمسات الفردية
+      [0],                           // تماماً / O'clock
+      [30],                          // والنصف / Half past
+      [15, 45],                      // الربع وإلا ربع / Quarter past & to
+      [10, 20, 40, 50],              // أثلاث وعشرات
+      [5, 25, 35, 55]                // خمسات
     ];
 
     for (let i = 0; i < count; i++) {
@@ -983,41 +1325,58 @@ class KidsClockApp {
 
       usedTimes.add(timeKey);
 
-      const hourText = arabicHourNames[targetHour];
-      let promptText = '';
-      let hintText = '';
+      const hourAr = arabicHourNames[targetHour];
+      const hourEn = englishHourNames[targetHour];
+      const nextH = (targetHour % 12) + 1;
+      const nextHourAr = arabicHourNames[nextH];
+      const nextHourEn = englishHourNames[nextH];
+
+      let promptAr = '';
+      let hintAr = '';
+      let promptEn = '';
+      let hintEn = '';
 
       if (targetMin === 0) {
-        promptText = `اضبط الساعة على: <strong>${targetHour}:00 تماماً 🔔</strong>`;
-        hintText = `العقرب الأزرق عند الرقم ${targetHour}، والعقرب البرتقالي يقف فوق 12 تماماً!`;
+        promptAr = `اضبط الساعة على: <strong>${targetHour}:00 تماماً 🔔</strong>`;
+        hintAr = `العقرب الأزرق عند الرقم ${targetHour}، والعقرب البرتقالي يقف فوق 12 تماماً!`;
+        promptEn = `Set the clock to: <strong>${targetHour}:00 (${hourEn} o'clock 🔔)</strong>`;
+        hintEn = `Blue hand points to ${targetHour}, orange hand points straight to 12!`;
       } else if (targetMin === 30) {
-        promptText = `اضبط الساعة على: <strong>${targetHour}:30 (الساعة ${hourText} والنصف ⏱️)</strong>`;
-        hintText = `العقرب البرتقالي يشير للأسفل تماماً عند الرقم 6!`;
+        promptAr = `اضبط الساعة على: <strong>${targetHour}:30 (الساعة ${hourAr} والنصف ⏱️)</strong>`;
+        hintAr = `العقرب البرتقالي يشير للأسفل تماماً عند الرقم 6!`;
+        promptEn = `Set the clock to: <strong>${targetHour}:30 (Half past ${hourEn} ⏱️)</strong>`;
+        hintEn = `Orange hand points straight down to 6!`;
       } else if (targetMin === 15) {
-        promptText = `اضبط الساعة على: <strong>${targetHour}:15 (الساعة ${hourText} والربع 🍕)</strong>`;
-        hintText = `العقرب البرتقالي يشير لليمين عند الرقم 3!`;
+        promptAr = `اضبط الساعة على: <strong>${targetHour}:15 (الساعة ${hourAr} والربع 🍕)</strong>`;
+        hintAr = `العقرب البرتقالي يشير لليمين عند الرقم 3!`;
+        promptEn = `Set the clock to: <strong>${targetHour}:15 (Quarter past ${hourEn} 🍕)</strong>`;
+        hintEn = `Orange hand points to the right at 3!`;
       } else if (targetMin === 45) {
-        const nextH = (targetHour % 12) + 1;
-        promptText = `اضبط الساعة على: <strong>${targetHour}:45 (الساعة ${arabicHourNames[nextH]} إلا ربعاً 🍕)</strong>`;
-        hintText = `العقرب البرتقالي يشير لليسار عند الرقم 9!`;
+        promptAr = `اضبط الساعة على: <strong>${targetHour}:45 (الساعة ${nextHourAr} إلا ربعاً 🍕)</strong>`;
+        hintAr = `العقرب البرتقالي يشير لليسار عند الرقم 9!`;
+        promptEn = `Set the clock to: <strong>${targetHour}:45 (Quarter to ${nextHourEn} 🍕)</strong>`;
+        hintEn = `Orange hand points to the left at 9!`;
       } else {
-        promptText = `اضبط الساعة على: <strong>${targetHour}:${targetMin.toString().padStart(2, '0')} 🐇</strong>`;
         const hop = Math.round(targetMin / 5);
-        hintText = `العقرب البرتقالي يقف عند الرقم ${hop} لأن (${hop} × 5 = ${targetMin}) دقيقة!`;
+        promptAr = `اضبط الساعة على: <strong>${targetHour}:${targetMin.toString().padStart(2, '0')} 🐇</strong>`;
+        hintAr = `العقرب البرتقالي يقف عند الرقم ${hop} لأن (${hop} × 5 = ${targetMin}) دقيقة!`;
+        promptEn = `Set the clock to: <strong>${targetHour}:${targetMin.toString().padStart(2, '0')} 🐇</strong>`;
+        hintEn = `Orange hand points to ${hop} because (${hop} × 5 = ${targetMin}) minutes!`;
       }
 
       questions.push({
-        prompt: promptText,
-        targetHour: targetHour,
-        targetMin: targetMin,
-        hint: hintText
+        promptAr,
+        hintAr,
+        promptEn,
+        hintEn,
+        targetHour,
+        targetMin
       });
     }
 
     return questions;
   }
 
-  // بدء جولة جديدة كلياً بأوقات عشوائية جديدة وبعدد الأسئلة المختار
   startNewQuizRound(count) {
     const questionsCount = count || this.quizQuestionsCount || 5;
     this.quizQuestionsCount = questionsCount;
@@ -1035,17 +1394,24 @@ class KidsClockApp {
     this.loadQuizQuestion(0);
     this.newRoundBtn.style.display = 'none';
     this.playTickSound();
-    const name = this.childName || 'يا بطل';
-    this.setMascotMessage(`انطلق اختبار الـ ${questionsCount} أسئلة بأوقات جديدة كلياً يا ${name}! هيا أرنا براعتك! 🚀`);
+
+    const name = this.childName || TRANSLATIONS[this.currentLang].childDefaultName;
+    if (this.currentLang === 'ar') {
+      this.setMascotMessage(`انطلق اختبار الـ ${questionsCount} أسئلة بأوقات جديدة كلياً يا ${name}! هيا أرنا براعتك! 🚀`);
+    } else {
+      this.setMascotMessage(`New challenge with ${questionsCount} fresh questions, ${name}! Show us your superpowers! 🚀`);
+    }
   }
 
-  // تغيير السؤال الحالي لسؤال عشوائي آخر
   shuffleCurrentQuestion() {
     const freshQ = this.generateRandomQuizQuestions(1)[0];
     this.quizQuestions[this.currentQuizIndex] = freshQ;
     this.loadQuizQuestion(this.currentQuizIndex);
     this.playTickSound();
-    this.setMascotMessage('تم تغيير الوقت بوقت جديد! حاول ضبطه الآن! 🎲');
+    const msg = this.currentLang === 'ar'
+      ? 'تم تغيير الوقت بوقت جديد! حاول ضبطه الآن! 🎲'
+      : 'Time shuffled to a fresh one! Try setting it now! 🎲';
+    this.setMascotMessage(msg);
   }
 
   loadQuizQuestion(index) {
@@ -1060,25 +1426,31 @@ class KidsClockApp {
       this.quizProgressBar.style.width = `${pct}%`;
     }
 
-    this.quizQuestionText.innerHTML = `${q.prompt}`;
+    const promptText = this.currentLang === 'ar' ? q.promptAr : q.promptEn;
+    const hintText = this.currentLang === 'ar' ? q.hintAr : q.hintEn;
+
+    this.quizQuestionText.innerHTML = promptText;
     this.quizFeedback.style.display = 'none';
     this.nextQuestionBtn.style.display = 'none';
     this.newRoundBtn.style.display = 'none';
     this.checkAnswerBtn.style.display = 'flex';
 
-    const name = this.childName || 'يا بطل';
-    this.setMascotMessage(`المهمة رقم ${index + 1} يا ${name}: ${q.prompt}. ${q.hint}`);
+    const name = this.childName || TRANSLATIONS[this.currentLang].childDefaultName;
+    if (this.currentLang === 'ar') {
+      this.setMascotMessage(`المهمة رقم ${index + 1} يا ${name}: ${promptText}. ${hintText}`);
+    } else {
+      this.setMascotMessage(`Mission #${index + 1}, ${name}: ${promptText}. ${hintText}`);
+    }
   }
 
   checkQuizAnswer() {
     const q = this.quizQuestions[this.currentQuizIndex];
-    // سماحية ±2 دقيقة
     const minuteDiff = Math.abs(this.currentMinutes - q.targetMin);
     const hourMatch = this.currentHours === q.targetHour;
 
+    const name = this.childName || TRANSLATIONS[this.currentLang].childDefaultName;
+
     if (hourMatch && minuteDiff <= 2) {
-      // إجابة صحيحة واحتفال حماسي
-      const name = this.childName || 'يا بطل';
       this.starsCount += 1;
       this.currentQuizCorrectCount += 1;
       this.starCounter.textContent = this.starsCount.toString();
@@ -1090,45 +1462,63 @@ class KidsClockApp {
 
       this.quizFeedback.className = 'quiz-feedback-box correct';
       this.feedbackIcon.textContent = '🎉';
-      this.feedbackText.textContent = `إجابة مذهلة ومتقنة يا ${name}! لقد حصلت على نجمة شجاعة جديدة! ⭐`;
+      if (this.currentLang === 'ar') {
+        this.feedbackText.textContent = `إجابة مذهلة ومتقنة يا ${name}! لقد حصلت على نجمة شجاعة جديدة! ⭐`;
+        this.setMascotMessage(`يا لك من ذكي ورائع يا ${name}! ضبطت الوقت بدقة فائقة! اضغط للسؤال التالي! 🚀`);
+        this.speakText(`أحسنت يا ${name}! إجابة ممتازة!`);
+      } else {
+        this.feedbackText.textContent = `Brilliant answer, ${name}! You earned a shiny gold star! ⭐`;
+        this.setMascotMessage(`Super smart and awesome, ${name}! Time set perfectly! Tap for the next question! 🚀`);
+        this.speakText(`Well done ${name}! Excellent answer!`);
+      }
       this.quizFeedback.style.display = 'flex';
 
       this.checkAnswerBtn.style.display = 'none';
       this.nextQuestionBtn.style.display = 'flex';
 
-      // رقص تكتك لفترة وجيزة
       this.mascotAvatar.classList.add('celebrating-mascot');
       setTimeout(() => this.mascotAvatar.classList.remove('celebrating-mascot'), 2500);
 
-      this.setMascotMessage(`يا لك من ذكي ورائع يا ${name}! ضبطت الوقت بدقة فائقة! اضغط للسؤال التالي! 🚀`);
       this.playCelebrationFanfare();
-      this.launchFlyingBalloons(10); // إطلاق بالونات ونجوم طائرة
+      this.launchFlyingBalloons(10);
       this.triggerConfetti('center', 85);
-      this.speakArabic(`أحسنت يا ${name}! إجابة ممتازة!`);
     } else {
-      // إجابة تحتاج تصحيح لطيف
-      const name = this.childName || 'يا بطل';
+      const hintText = this.currentLang === 'ar' ? q.hintAr : q.hintEn;
       this.quizFeedback.className = 'quiz-feedback-box wrong';
       this.feedbackIcon.textContent = '🤔';
-      this.feedbackText.textContent = `قريب جداً يا ${name}! ${q.hint}. حاول تحريك العقرب مجدداً!`;
+      if (this.currentLang === 'ar') {
+        this.feedbackText.textContent = `قريب جداً يا ${name}! ${hintText}. حاول تحريك العقرب مجدداً!`;
+        this.setMascotMessage(`لا بأس يا ${name}، حاول مرة أخرى! تذكر: ${hintText}`);
+      } else {
+        this.feedbackText.textContent = `Almost there, ${name}! ${hintText}. Try moving the hands again!`;
+        this.setMascotMessage(`No worries ${name}, give it another shot! Remember: ${hintText}`);
+      }
       this.quizFeedback.style.display = 'flex';
-
       this.playOopsSound();
-      this.setMascotMessage(`لا بأس يا ${name}، حاول مرة أخرى! تذكر: ${q.hint}`);
     }
   }
 
-  // مساعدة تكتك الذكية للأطفال لضبط العقارب
+  nextQuizQuestion() {
+    this.playTickSound();
+    if (this.currentQuizIndex + 1 < this.quizQuestions.length) {
+      this.loadQuizQuestion(this.currentQuizIndex + 1);
+    } else {
+      this.triggerGrandCelebration();
+    }
+  }
+
   autoSolveForChild() {
     const q = this.quizQuestions[this.currentQuizIndex];
     if (!q) return;
     this.setTime(q.targetHour, q.targetMin, true);
     this.playChimeSound();
-    const name = this.childName || 'يا بطل';
-    this.setMascotMessage(`لقد ساعدتك وضبطت العقارب على الوقت المطلوب يا ${name}! 🪄 اضغط الآن زر "تحقّق من إجابتي" لنحتفل معاً! 🎉`);
+    const name = this.childName || TRANSLATIONS[this.currentLang].childDefaultName;
+    const msg = this.currentLang === 'ar'
+      ? `لقد ساعدتك وضبطت العقارب على الوقت المطلوب يا ${name}! 🪄 اضغط الآن زر "تحقّق من إجابتي" لنحتفل معاً! 🎉`
+      : `I helped you set the hands to the right time, ${name}! 🪄 Now tap "Check my answer" to celebrate together! 🎉`;
+    this.setMascotMessage(msg);
   }
 
-  // إطلاق سرب البالونات والنجوم المبهجة الطائرة
   launchFlyingBalloons(count = 14) {
     if (!this.balloonsContainer) return;
     const balloonIcons = ['🎈', '🎉', '⭐', '🎈', '🥳', '✨', '🎈', '🏆', '🎊', '⭐', '🎈', '🌟'];
@@ -1149,169 +1539,155 @@ class KidsClockApp {
       this.balloonsContainer.appendChild(balloon);
 
       setTimeout(() => {
-        balloon.remove();
-      }, (animDelay + animDuration + 0.6) * 1000);
+        if (balloon.parentNode) balloon.parentNode.removeChild(balloon);
+      }, (animDelay + animDuration) * 1000 + 500);
     }
   }
 
-  nextQuizQuestion() {
-    let nextIndex = this.currentQuizIndex + 1;
-    if (nextIndex >= this.quizQuestions.length) {
-      // إتمام الاختبار كاملاً وعرض نافذة التهنئة الكبرى!
-      if (this.quizProgressBar) {
-        this.quizProgressBar.style.width = '100%';
-      }
-      this.triggerGrandCelebration();
-    } else {
-      this.loadQuizQuestion(nextIndex);
-    }
-  }
-
-  // نافذة التهنئة الكبرى والاحتفال الضخم بنهاية الاختبار
   triggerGrandCelebration() {
-    const name = this.childName || 'يا بطل الأبطال';
+    const name = this.childName || TRANSLATIONS[this.currentLang].childDefaultName;
+    const totalQ = this.quizQuestions ? this.quizQuestions.length : 5;
+    const correctQ = this.currentQuizCorrectCount || totalQ;
 
-    // 1. تحديث ملخص وإحصائيات نتيجة الاختبار
-    if (this.summaryQuestionsCount) {
-      this.summaryQuestionsCount.textContent = this.quizQuestions.length.toString();
-    }
-    if (this.summaryStarsCount) {
-      this.summaryStarsCount.textContent = `+${this.currentQuizCorrectCount}`;
-    }
+    if (this.summaryQuestionsCount) this.summaryQuestionsCount.textContent = totalQ.toString();
+    if (this.summaryStarsCount) this.summaryStarsCount.textContent = `+${correctQ}`;
     if (this.summaryBadgeEarned) {
-      const isPerfect = this.currentQuizCorrectCount === this.quizQuestions.length;
-      this.summaryBadgeEarned.textContent = isPerfect ? 'خارق 🏆' : 'ممتاز ⭐';
+      if (this.currentLang === 'ar') {
+        this.summaryBadgeEarned.textContent = correctQ === totalQ ? 'عبقري الوقت! 👑' : 'بطل متميز! ⭐';
+      } else {
+        this.summaryBadgeEarned.textContent = correctQ === totalQ ? 'Time Genius! 👑' : 'Super Star! ⭐';
+      }
     }
 
-    // 2. إطلاق سرب البالونات الطائرة الضخم
-    this.launchFlyingBalloons(22);
+    if (this.currentLang === 'ar') {
+      this.celebrationTitle.textContent = `ألف مبروك يا بطل الأبطال «${name}»! 🏆`;
+      this.celebrationSubtitle.textContent = `لقد أتممت الاختبار بنجاح باهر وجمعت ${correctQ} من ${totalQ} نجوم!`;
+      this.speakText(`مبروك يا ${name}! أنت بطل جزيرة الوقت الحقيقي!`);
+    } else {
+      this.celebrationTitle.textContent = `Huge Congratulations, Champion "${name}"! 🏆`;
+      this.celebrationSubtitle.textContent = `You finished the quiz brilliantly and won ${correctQ} out of ${totalQ} stars!`;
+      this.speakText(`Congratulations ${name}! You are the true master of Time Island!`);
+    }
 
-    // 3. رقص وقفز تكتك الاحتفالي
-    this.mascotAvatar.classList.add('celebrating-mascot');
-    setTimeout(() => this.mascotAvatar.classList.remove('celebrating-mascot'), 5500);
-
-    // 4. مدافع الكونفيتي المتتابعة
-    this.triggerConfetti('center', 100);
-    setTimeout(() => this.triggerConfetti('left', 85), 250);
-    setTimeout(() => this.triggerConfetti('right', 85), 500);
-    setTimeout(() => this.triggerConfetti('center', 120), 800);
-    setTimeout(() => this.launchFlyingBalloons(10), 1200);
-
-    // 5. عزف ألحان النصر الكبرى الفخمة
-    this.playGrandFanfare();
-
-    // 6. فتح نافذة التهنئة المنبثقة
-    this.celebrationTitle.innerHTML = `🏆 ألف مبروك يا بطلنا «${name}»!`;
-    this.celebrationSubtitle.innerHTML = `أنهيت هذا الاختبار بنجاح باهر وجمعت <strong>${this.currentQuizCorrectCount} من ${this.quizQuestions.length} نجوم ذهبية ⭐</strong>!`;
     this.grandCelebrationModal.classList.add('active');
-
-    // إظهار زر الجولة الجديدة في الكويز
-    this.quizFeedback.className = 'quiz-feedback-box correct';
-    this.feedbackIcon.textContent = '🏆';
-    this.feedbackText.textContent = `ألف مبروك يا ${name}! لقد أتممت جميع أسئلة هذا الاختبار بنجاح باهر!`;
-    this.nextQuestionBtn.style.display = 'none';
-    this.newRoundBtn.style.display = 'flex';
-
-    // 7. صوت تشجيع عربي فخور
-    const praises = [
-      `مبارك يا ${name}! أنهيت الاختبار بتفوق وتستحق وسام سيد الوقت بجدارة!`,
-      `واااو يا ${name}! أداء مذهل وبطولي، أنا فخور جداً بك يا بطل!`
-    ];
-    this.speakArabic(praises[Math.floor(Math.random() * praises.length)]);
+    this.playGrandFanfare();
+    this.launchFlyingBalloons(24);
+    this.triggerConfetti('rain', 250);
   }
 
   /* --------------------------------------------------------------------------
-     8. محرك الألعاب النارية والاحتفالات (Canvas Confetti المتطور متعدد الأشكال)
+     8. محرك الاحتفالات والقصاصات الملونة (HTML5 Canvas Confetti)
      -------------------------------------------------------------------------- */
   initConfetti() {
-    this.confettiCanvas = document.getElementById('confettiCanvas');
-    this.confettiCtx = this.confettiCanvas.getContext('2d');
-    this.confettiParticles = [];
+    this.canvas = document.getElementById('confettiCanvas');
+    if (!this.canvas) return;
+    this.ctx = this.canvas.getContext('2d');
+    this.particles = [];
+    this.isConfettiActive = false;
 
     const resize = () => {
-      this.confettiCanvas.width = window.innerWidth;
-      this.confettiCanvas.height = window.innerHeight;
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
     };
     window.addEventListener('resize', resize);
     resize();
-
-    this.animateConfetti();
   }
 
-  triggerConfetti(origin = 'center', count = 80) {
-    const colors = ['#f43f5e', '#3b82f6', '#10b981', '#facc15', '#a855f7', '#fb923c', '#ec4899', '#06b6d4', '#e11d48'];
-    const shapes = ['rect', 'circle', 'ribbon'];
-    let startX = window.innerWidth / 2;
-    let startY = window.innerHeight / 2;
+  triggerConfetti(mode = 'center', count = 100) {
+    if (!this.canvas) return;
+    const colors = ['#f43f5e', '#3b82f6', '#10b981', '#facc15', '#a855f7', '#fb923c', '#38bdf8'];
+
+    const originX = mode === 'center' ? this.canvas.width / 2 : Math.random() * this.canvas.width;
+    const originY = mode === 'center' ? this.canvas.height / 2 : 0;
 
     for (let i = 0; i < count; i++) {
-      let vx = (Math.random() - 0.5) * 18;
-      let vy = (Math.random() - 0.8) * 20;
+      const angle = mode === 'center' ? Math.random() * Math.PI * 2 : Math.PI / 2 + (Math.random() - 0.5);
+      const speed = mode === 'center' ? (4 + Math.random() * 9) : (2 + Math.random() * 5);
 
-      if (origin === 'left') {
-        startX = 60;
-        startY = window.innerHeight * 0.75;
-        vx = Math.random() * 16 + 5;       // يندفع نحو اليمين
-        vy = -(Math.random() * 18 + 12);   // يندفع نحو الأعلى
-      } else if (origin === 'right') {
-        startX = window.innerWidth - 60;
-        startY = window.innerHeight * 0.75;
-        vx = -(Math.random() * 16 + 5);    // يندفع نحو اليسار
-        vy = -(Math.random() * 18 + 12);   // يندفع نحو الأعلى
-      }
-
-      this.confettiParticles.push({
-        x: startX,
-        y: startY,
-        vx: vx,
-        vy: vy,
-        size: Math.random() * 11 + 6,
+      this.particles.push({
+        x: mode === 'center' ? originX : Math.random() * this.canvas.width,
+        y: mode === 'center' ? originY : -20,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        size: 7 + Math.random() * 8,
         color: colors[Math.floor(Math.random() * colors.length)],
-        shape: shapes[Math.floor(Math.random() * shapes.length)],
         rotation: Math.random() * 360,
-        rotationSpeed: (Math.random() - 0.5) * 16,
-        opacity: 1
+        rotationSpeed: (Math.random() - 0.5) * 12,
+        shape: Math.random() > 0.4 ? 'rect' : 'star',
+        alpha: 1,
+        gravity: 0.22,
+        friction: 0.985
       });
+    }
+
+    if (!this.isConfettiActive) {
+      this.isConfettiActive = true;
+      this.renderConfetti();
     }
   }
 
-  animateConfetti() {
-    requestAnimationFrame(() => this.animateConfetti());
-    if (this.confettiParticles.length === 0) return;
+  renderConfetti() {
+    if (!this.isConfettiActive || !this.ctx) return;
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.confettiCtx.clearRect(0, 0, this.confettiCanvas.width, this.confettiCanvas.height);
-
-    for (let i = this.confettiParticles.length - 1; i >= 0; i--) {
-      const p = this.confettiParticles[i];
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const p = this.particles[i];
       p.x += p.vx;
       p.y += p.vy;
-      p.vy += 0.38; // gravity
+      p.vy += p.gravity;
+      p.vx *= p.friction;
       p.rotation += p.rotationSpeed;
-      p.opacity -= 0.006; // يدوم لقرابة 3 ثوان كاملة
+      p.alpha -= 0.0075;
 
-      if (p.opacity <= 0 || p.y > window.innerHeight + 60) {
-        this.confettiParticles.splice(i, 1);
+      if (p.alpha <= 0 || p.y > this.canvas.height + 50) {
+        this.particles.splice(i, 1);
         continue;
       }
 
-      this.confettiCtx.save();
-      this.confettiCtx.translate(p.x, p.y);
-      this.confettiCtx.rotate((p.rotation * Math.PI) / 180);
-      this.confettiCtx.globalAlpha = Math.max(0, p.opacity);
-      this.confettiCtx.fillStyle = p.color;
+      this.ctx.save();
+      this.ctx.translate(p.x, p.y);
+      this.ctx.rotate((p.rotation * Math.PI) / 180);
+      this.ctx.globalAlpha = Math.max(0, p.alpha);
+      this.ctx.fillStyle = p.color;
 
-      if (p.shape === 'circle') {
-        this.confettiCtx.beginPath();
-        this.confettiCtx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
-        this.confettiCtx.fill();
-      } else if (p.shape === 'ribbon') {
-        this.confettiCtx.fillRect(-p.size / 4, -p.size, p.size / 2, p.size * 2);
+      if (p.shape === 'rect') {
+        this.ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 1.4);
       } else {
-        this.confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        this.drawMiniStar(this.ctx, 0, 0, 5, p.size * 0.8, p.size * 0.4);
       }
-
-      this.confettiCtx.restore();
+      this.ctx.restore();
     }
+
+    if (this.particles.length > 0) {
+      requestAnimationFrame(() => this.renderConfetti());
+    } else {
+      this.isConfettiActive = false;
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+  }
+
+  drawMiniStar(ctx, cx, cy, spikes, outerRadius, innerRadius) {
+    let rot = (Math.PI / 2) * 3;
+    let x = cx;
+    let y = cy;
+    let step = Math.PI / spikes;
+
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - outerRadius);
+    for (let i = 0; i < spikes; i++) {
+      x = cx + Math.cos(rot) * outerRadius;
+      y = cy + Math.sin(rot) * outerRadius;
+      ctx.lineTo(x, y);
+      rot += step;
+
+      x = cx + Math.cos(rot) * innerRadius;
+      y = cy + Math.sin(rot) * innerRadius;
+      ctx.lineTo(x, y);
+      rot += step;
+    }
+    ctx.lineTo(cx, cy - outerRadius);
+    ctx.closePath();
+    ctx.fill();
   }
 }
 

@@ -27,12 +27,18 @@
       <div class="logo-area">
         <span class="logo-icon">⏰</span>
         <div class="logo-title-group">
-          <h1 class="logo-title">جزيرة الوقت</h1>
-          <span class="logo-subtitle hide-on-mobile">مغامرة تعلّم الساعة للأبطال</span>
+          <h1 class="logo-title" data-i18n="logoTitle">جزيرة الوقت</h1>
+          <span class="logo-subtitle hide-on-mobile" data-i18n="logoSubtitle">مغامرة تعلّم الساعة للأبطال</span>
         </div>
       </div>
 
       <div class="header-stats">
+        <!-- زر تبديل اللغة (عربي / English) -->
+        <button id="langToggleBtn" class="lang-toggle-btn" title="English / العربية">
+          <span class="lang-icon">🌐</span>
+          <span id="currentLangLabel">English</span>
+        </button>
+
         <div class="child-name-badge" id="childNameBadge" title="اسم البطل - اضغط للتعديل">
           <span class="crown-icon">👑</span>
           <span id="childNameDisplay">البطل</span>
@@ -43,7 +49,7 @@
           <span id="starCounter" class="stat-number">0</span>
         </div>
         <button id="testCelebrationBtn" class="celebration-test-btn" title="اضغط لتجربة ومعاينة الاحتفال الكبير فوراً!">
-          <span>🎉</span> <span class="hide-on-mobile">احتفال!</span>
+          <span>🎉</span> <span class="hide-on-mobile" data-i18n="partyBtn">احتفال!</span>
         </button>
         <button id="soundToggleBtn" class="icon-btn" title="كتم / تفعيل الصوت">
           <span id="soundIcon">🔊</span>
@@ -55,15 +61,15 @@
     <nav class="modes-nav">
       <button class="mode-tab active" data-mode="explore" id="tabExplore">
         <span class="tab-icon">🧭</span>
-        <span>العب واستكشف</span>
+        <span data-i18n="tabExplore">العب واستكشف</span>
       </button>
       <button class="mode-tab" data-mode="lessons" id="tabLessons">
         <span class="tab-icon">🎓</span>
-        <span>المحطات التعليمية</span>
+        <span data-i18n="tabLessons">المحطات التعليمية</span>
       </button>
       <button class="mode-tab" data-mode="quiz" id="tabQuiz">
         <span class="tab-icon">🏆</span>
-        <span>تحدي الأبطال</span>
+        <span data-i18n="tabQuiz">تحدي الأبطال</span>
       </button>
     </nav>
 
@@ -77,17 +83,17 @@
         <div id="quizHeaderCard" class="mode-element mode-for-quiz quiz-top-card">
           <div class="quiz-status-row">
             <div class="quiz-streak">
-              <span>السؤال: <strong id="questionNumber">1</strong> / <span id="totalQuestionsNumber">5</span></span>
+              <span><span data-i18n="quizStreakLabel">السؤال:</span> <strong id="questionNumber">1</strong> / <span id="totalQuestionsNumber">5</span></span>
             </div>
             <div class="quiz-progress-track">
               <div class="quiz-progress-bar" id="quizProgressBar" style="width: 20%;"></div>
             </div>
             <button id="btnRestartQuizSetup" class="pill-btn mini-pill quiz-settings-pill" title="تغيير عدد الأسئلة أو اسم البطل">
-              ⚙️ إعداد
+              <span data-i18n="quizSettingsBtn">⚙️ إعداد</span>
             </button>
           </div>
           <div class="quiz-question-box">
-            <span class="question-tag">🎯 مهمتك يا بطل:</span>
+            <span class="question-tag" data-i18n="quizMissionTag">🎯 مهمتك يا بطل:</span>
             <h2 class="question-prompt" id="quizQuestionText">اضبط عقارب الساعة على: <strong>الساعة 3:00 تماماً</strong></h2>
           </div>
         </div>
@@ -111,18 +117,18 @@
           </div>
           <div class="mascot-bubble" id="mascotSpeech">
             <p id="speechText">أهلاً يا بطل! أنا صديقك <strong>«تكتُك»</strong>. اسحب العقارب بإصبعك وشاهد ماذا يحدث!</p>
-            <button id="speakButton" class="mini-speech-btn" title="استمع لصوت تكتك">🔊 استمع</button>
+            <button id="speakButton" class="mini-speech-btn" title="استمع لصوت تكتك"><span data-i18n="listenBtn">🔊 استمع</span></button>
           </div>
         </div>
 
         <!-- في وضع الدروس: شريط المحطات التعليمية السريعة -->
         <div id="lessonsHeaderCard" class="mode-element mode-for-lessons lessons-top-card">
           <div class="lessons-chips-row">
-            <button class="lesson-card lesson-chip active" data-lesson="1"><span class="chip-icon">🐢</span><span>1. الساعات</span></button>
-            <button class="lesson-card lesson-chip" data-lesson="2"><span class="chip-icon">🐇</span><span>2. الدقائق</span></button>
-            <button class="lesson-card lesson-chip" data-lesson="3"><span class="chip-icon">🔔</span><span>3. تماماً</span></button>
-            <button class="lesson-card lesson-chip" data-lesson="4"><span class="chip-icon">🍕</span><span>4. النصف والربع</span></button>
-            <button class="lesson-card lesson-chip" data-lesson="5"><span class="chip-icon">🦘</span><span>5. الخمسات</span></button>
+            <button class="lesson-card lesson-chip active" data-lesson="1"><span class="chip-icon">🐢</span><span data-i18n="lessonChip1">1. الساعات</span></button>
+            <button class="lesson-card lesson-chip" data-lesson="2"><span class="chip-icon">🐇</span><span data-i18n="lessonChip2">2. الدقائق</span></button>
+            <button class="lesson-card lesson-chip" data-lesson="3"><span class="chip-icon">🔔</span><span data-i18n="lessonChip3">3. تماماً</span></button>
+            <button class="lesson-card lesson-chip" data-lesson="4"><span class="chip-icon">🍕</span><span data-i18n="lessonChip4">4. النصف والربع</span></button>
+            <button class="lesson-card lesson-chip" data-lesson="5"><span class="chip-icon">🦘</span><span data-i18n="lessonChip5">5. الخمسات</span></button>
           </div>
         </div>
 
@@ -134,10 +140,10 @@
         <!-- أدوات المساعدة البصرية حول الساعة -->
         <div class="clock-helpers-bar">
           <button id="toggleMinutesGuideBtn" class="pill-btn active">
-            <span>💡</span> أرقام الدقائق (05, 10..)
+            <span>💡</span> <span data-i18n="toggleMinutesGuide">أرقام الدقائق (05, 10..)</span>
           </button>
           <button id="toggleSectorBtn" class="pill-btn">
-            <span>🍕</span> شريحة النصف والربع
+            <span>🍕</span> <span data-i18n="toggleSector">شريحة النصف والربع</span>
           </button>
         </div>
 
@@ -195,14 +201,14 @@
             <g id="hourHandGroup" class="hand-group hour-hand-group">
               <rect x="189" y="85" width="22" height="135" rx="11" fill="url(#hourHandGrad)" filter="url(#softShadow)" />
               <path d="M200 65 L215 90 L185 90 Z" fill="#1d4ed8" />
-              <text x="200" y="145" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">ساعة</text>
+              <text id="hourHandText" x="200" y="145" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">ساعة</text>
             </g>
 
             <!-- عقرب الدقائق (الطويل - البرتقالي) -->
             <g id="minuteHandGroup" class="hand-group minute-hand-group">
               <rect x="192" y="45" width="16" height="175" rx="8" fill="url(#minuteHandGrad)" filter="url(#softShadow)" />
               <path d="M200 25 L213 50 L187 50 Z" fill="#ea580c" />
-              <text x="200" y="105" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">دقيقة</text>
+              <text id="minuteHandText" x="200" y="105" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">دقيقة</text>
             </g>
 
             <!-- مركز الساعة (المسمار الأوسط) -->
@@ -215,17 +221,17 @@
         <!-- الشاشة الرقمية والوصف اللغوي المدمج -->
         <div class="time-readout-card">
           <div class="digital-box">
-            <span class="digital-label">الساعة الرقمية</span>
+            <span class="digital-label" data-i18n="digitalLabel">الساعة الرقمية</span>
             <div class="digital-display" id="digitalClockDisplay">
               <span id="digitalHours" class="digit hour-digit">12</span>
               <span class="digit-separator">:</span>
               <span id="digitalMinutes" class="digit min-digit">00</span>
-              <span id="digitalPeriod" class="period-pill">صباحاً ☀️</span>
+              <span id="digitalPeriod" class="period-pill">نهاراً ☀️</span>
             </div>
           </div>
 
           <div class="arabic-phrase-box">
-            <span class="phrase-label">نطقها بالعربية</span>
+            <span class="phrase-label" id="phraseLabel" data-i18n="phraseLabel">نطقها بالكلمات</span>
             <div class="arabic-phrase" id="arabicTimePhrase">الساعة الثانية عشرة تماماً</div>
           </div>
         </div>
@@ -244,22 +250,22 @@
 
           <div class="quiz-main-actions">
             <button id="checkAnswerBtn" class="primary-action-btn">
-              <span>🚀</span> تحقّق من إجابتي يا تكتك!
+              <span>🚀</span> <span data-i18n="checkAnswerBtn">تحقّق من إجابتي يا تكتك!</span>
             </button>
             <button id="nextQuestionBtn" class="secondary-action-btn" style="display: none;">
-              السؤال التالي ⬅️
+              <span data-i18n="nextQuestionBtn">السؤال التالي ⬅️</span>
             </button>
             <button id="newRoundBtn" class="accent-action-btn" style="display: none;">
-              <span>🎲</span> جولة تحدي جديدة بأوقات جديدة!
+              <span>🎲</span> <span data-i18n="newRoundBtn">جولة تحدي جديدة بأوقات جديدة!</span>
             </button>
           </div>
 
           <div class="quiz-helper-actions-row">
             <button id="autoSetClockBtn" class="pill-btn assist-btn" title="دع تكتك يضبط العقارب للمساعدة والتعلم">
-              🪄 مساعدة تكتك
+              <span data-i18n="assistBtn">🪄 مساعدة تكتك</span>
             </button>
             <button id="shuffleQuestionBtn" class="pill-btn shuffle-btn" title="تغيير هذا الوقت بوقت عشوائي آخر">
-              🔄 وقت آخر
+              <span data-i18n="shuffleBtn">🔄 وقت آخر</span>
             </button>
           </div>
         </div>
@@ -267,29 +273,29 @@
         <!-- في وضع الاستكشاف: أزرار القفز السريع والبطاقات الإرشادية -->
         <div id="exploreBottomCard" class="mode-element mode-for-explore explore-bottom-card">
           <div class="quick-adjust-bar">
-            <button class="quick-btn" data-add-mins="60">+1 ساعة</button>
-            <button class="quick-btn" data-add-mins="30">+30 دقيقة (نصف)</button>
-            <button class="quick-btn" data-add-mins="15">+15 دقيقة (ربع)</button>
-            <button class="quick-btn" data-add-mins="5">+5 دقائق</button>
-            <button class="quick-btn reset-btn" id="btnNowTime">الوقت الحالي الآن ⚡</button>
+            <button class="quick-btn" data-add-mins="60" data-i18n="quickHour">+1 ساعة</button>
+            <button class="quick-btn" data-add-mins="30" data-i18n="quick30">+30 دقيقة (نصف)</button>
+            <button class="quick-btn" data-add-mins="15" data-i18n="quick15">+15 دقيقة (ربع)</button>
+            <button class="quick-btn" data-add-mins="5" data-i18n="quick5">+5 دقائق</button>
+            <button class="quick-btn reset-btn" id="btnNowTime" data-i18n="quickNow">الوقت الحالي الآن ⚡</button>
           </div>
 
           <div class="tips-grid">
             <div class="tip-card">
-              <span class="tip-badge blue">العقرب الأزرق</span>
-              <p>هو <strong>عقرب الساعات</strong>: قصير وبطيء، يخبرك في أي ساعة نحن الآن.</p>
+              <span class="tip-badge blue" data-i18n="tip1Badge">العقرب الأزرق</span>
+              <p data-i18n="tip1Text">هو <strong>عقرب الساعات</strong>: قصير وبطيء، يخبرك في أي ساعة نحن الآن.</p>
             </div>
             <div class="tip-card">
-              <span class="tip-badge orange">العقرب البرتقالي</span>
-              <p>هو <strong>عقرب الدقائق</strong>: طويل وسريع، يخبرك كم دقيقة مرت.</p>
+              <span class="tip-badge orange" data-i18n="tip2Badge">العقرب البرتقالي</span>
+              <p data-i18n="tip2Text">هو <strong>عقرب الدقائق</strong>: طويل وسريع، يخبرك كم دقيقة مرت.</p>
             </div>
             <div class="tip-card">
-              <span class="tip-badge purple">سر البيتزا 🍕</span>
-              <p>شريحة البيتزا توضح النصف والربع بتقسيم الدائرة بشكل ملون شهي!</p>
+              <span class="tip-badge purple" data-i18n="tip3Badge">سر البيتزا 🍕</span>
+              <p data-i18n="tip3Text">شريحة البيتزا توضح النصف والربع بتقسيم الدائرة بشكل ملون شهي!</p>
             </div>
             <div class="tip-card">
-              <span class="tip-badge yellow">الشمس والقمر ☀️🌙</span>
-              <p>راقب السماء في الخلفية؛ ستشرق الشمس نهاراً وتظهر النجوم ليلاً!</p>
+              <span class="tip-badge yellow" data-i18n="tip4Badge">الشمس والقمر ☀️🌙</span>
+              <p data-i18n="tip4Text">راقب السماء في الخلفية؛ ستشرق الشمس نهاراً وتظهر النجوم ليلاً!</p>
             </div>
           </div>
         </div>
@@ -297,8 +303,8 @@
         <!-- في وضع الدروس: شرح المحطة الحالية -->
         <div id="lessonsBottomCard" class="mode-element mode-for-lessons lessons-bottom-card">
           <div class="active-lesson-box" id="activeLessonBox">
-            <h3 class="active-lesson-title" id="activeLessonTitle">المحطة 1: عقرب الساعات الكسول</h3>
-            <p class="active-lesson-desc" id="activeLessonDesc">تعرف على العقرب الأزرق القصير والبطيء كالسّلحفاة الذي يدور ببطء ويخبرنا بالساعة.</p>
+            <h3 class="active-lesson-title" id="activeLessonTitle">المحطة 1: عقرب الساعات (الأزرق القصير)</h3>
+            <p class="active-lesson-desc" id="activeLessonDesc">تعرف على العقرب الأزرق القصير والبطيء كالسّلحفاة الذي يدور بهدوء ويخبرنا بالساعة الحالية.</p>
           </div>
         </div>
 
@@ -316,10 +322,9 @@
       <div class="footer-card">
         <div class="footer-badge">
           <span class="heart-pulse">❤️</span>
-          <span class="footer-credit">صُنع بحب بواسطة <strong class="engineer-name">المهندسة أسماء محمد عبد
-              الرءوف</strong></span>
+          <span class="footer-credit"><span data-i18n="footerMadeBy">صُنع بحب بواسطة</span> <strong class="engineer-name" data-i18n="engineerName">المهندسة أسماء محمد عبد الرءوف</strong></span>
         </div>
-        <p class="footer-quote">«الوقت هو أثمن ما نملك.. بالمتعة واللعب نبني عباقرة المستقبل» ⏰✨</p>
+        <p class="footer-quote" data-i18n="footerQuote">«الوقت هو أثمن ما نملك.. بالمتعة واللعب نبني عباقرة المستقبل» ⏰✨</p>
       </div>
     </footer>
 
@@ -336,8 +341,8 @@
     <div class="name-modal-card">
       <button class="modal-close-corner-btn" id="closeNameModalBtn" title="إغلاق النافذة" aria-label="إغلاق">✕</button>
       <div class="modal-mascot-icon">⏰✨</div>
-      <h2 class="modal-title">أهلاً بك في جزيرة الوقت!</h2>
-      <p class="modal-desc">أنا صديقك <strong>«تكتُك»</strong>.. ما هو اسمك الجميل لنبدأ المغامرة معاً؟</p>
+      <h2 class="modal-title" data-i18n="nameModalTitle">أهلاً بك في جزيرة الوقت!</h2>
+      <p class="modal-desc" data-i18n="nameModalDesc">أنا صديقك <strong>«تكتُك»</strong>.. ما هو اسمك الجميل لنبدأ المغامرة معاً؟</p>
 
       <form id="nameForm" class="name-form" onsubmit="event.preventDefault();">
         <div class="input-wrapper">
@@ -345,7 +350,7 @@
             placeholder="اكتب اسمك هنا (مثال: عمر، مريم، يوسف..)" maxlength="20" autocomplete="off" required />
         </div>
         <button type="submit" id="saveNameBtn" class="bouncy-start-btn">
-          <span>🚀</span> انطلق في المغامرة!
+          <span>🚀</span> <span data-i18n="nameModalBtn">انطلق في المغامرة!</span>
         </button>
       </form>
     </div>
@@ -357,25 +362,25 @@
       <button class="modal-close-corner-btn" id="closeCelebrationBtn" title="إغلاق النافذة"
         aria-label="إغلاق">✕</button>
       <div class="trophy-bounce">🏆🎉</div>
-      <h2 class="celebration-title" id="celebrationTitle">ألف مبروك يا بطل الأبطال!</h2>
-      <p class="celebration-subtitle" id="celebrationSubtitle">لقد أتممت الاختبار بنجاح باهر وتألقت في معرفة الوقت!</p>
+      <h2 class="celebration-title" id="celebrationTitle" data-i18n="celebrationTitle">ألف مبروك يا بطل الأبطال!</h2>
+      <p class="celebration-subtitle" id="celebrationSubtitle" data-i18n="celebrationSubtitle">لقد أتممت الاختبار بنجاح باهر وتألقت في معرفة الوقت!</p>
 
       <!-- بطاقة نتيجة الاختبار المكتمل -->
       <div class="quiz-summary-box">
         <div class="summary-stat-item">
           <span class="summary-stat-icon">📝</span>
           <span class="summary-stat-val" id="summaryQuestionsCount">5</span>
-          <span class="summary-stat-lbl">أسئلة منجزة</span>
+          <span class="summary-stat-lbl" data-i18n="summaryDoneLabel">أسئلة منجزة</span>
         </div>
         <div class="summary-stat-item">
           <span class="summary-stat-icon">⭐</span>
           <span class="summary-stat-val" id="summaryStarsCount">+5</span>
-          <span class="summary-stat-lbl">نجوم ذهبية</span>
+          <span class="summary-stat-lbl" data-i18n="summaryStarsLabel">نجوم ذهبية</span>
         </div>
         <div class="summary-stat-item">
           <span class="summary-stat-icon">👑</span>
-          <span class="summary-stat-val" id="summaryBadgeEarned">ممتاز!</span>
-          <span class="summary-stat-lbl">التقييم</span>
+          <span class="summary-stat-val" id="summaryBadgeEarned" data-i18n="summaryRatingVal">ممتاز!</span>
+          <span class="summary-stat-lbl" data-i18n="summaryRatingLabel">التقييم</span>
         </div>
       </div>
 
@@ -388,7 +393,7 @@
       </div>
 
       <button id="startNewQuizFromPopupBtn" class="bouncy-start-btn">
-        <span>🚀</span> بدء اختبار جديد وتحدٍ ممتع!
+        <span>🚀</span> <span data-i18n="celebrationNewQuizBtn">بدء اختبار جديد وتحدٍ ممتع!</span>
       </button>
     </div>
   </div>
@@ -398,40 +403,40 @@
     <div class="name-modal-card setup-modal-card">
       <button class="modal-close-corner-btn" id="closeQuizSetupBtn" title="إغلاق النافذة" aria-label="إغلاق">✕</button>
       <div class="modal-mascot-icon">🎮⏰</div>
-      <h2 class="modal-title">تجهيز الاختبار الجديد</h2>
-      <p class="modal-desc">اختر تفاصيل التحدي يا بطل لتنطلق في المغامرة!</p>
+      <h2 class="modal-title" data-i18n="quizSetupTitle">تجهيز الاختبار الجديد</h2>
+      <p class="modal-desc" data-i18n="quizSetupDesc">اختر تفاصيل التحدي يا بطل لتنطلق في المغامرة!</p>
 
       <!-- القسم 1: من هو البطل؟ (التحقق من الاسم أو تعديله) -->
       <div class="setup-section">
-        <label class="setup-section-label" for="setupPlayerNameInput">👑 اسم البطل المشارك في الاختبار:</label>
+        <label class="setup-section-label" for="setupPlayerNameInput" data-i18n="setupNameLabel">👑 اسم البطل المشارك في الاختبار:</label>
         <div class="input-wrapper">
           <input type="text" id="setupPlayerNameInput" class="child-name-input" placeholder="اكتب اسم البطل هنا..."
             maxlength="20" autocomplete="off" />
         </div>
-        <p class="setup-input-hint">تأكد من اسمك لتسجيل كل نجومك وبطولاتك باسمك! ⭐</p>
+        <p class="setup-input-hint" data-i18n="setupNameHint">تأكد من اسمك لتسجيل كل نجومك وبطولاتك باسمك! ⭐</p>
       </div>
 
       <!-- القسم 2: كم عدد الأسئلة في الاختبار؟ -->
       <div class="setup-section">
-        <label class="setup-section-label">🎯 كم عدد أسئلة هذا الاختبار؟</label>
+        <label class="setup-section-label" data-i18n="setupCountLabel">🎯 كم عدد أسئلة هذا الاختبار؟</label>
         <div class="question-count-options">
           <button type="button" class="count-option-btn" data-count="3">
             <span class="count-num">3</span>
-            <span class="count-label">تحدي سريع ⚡</span>
+            <span class="count-label" data-i18n="setupCountFast">تحدي سريع ⚡</span>
           </button>
           <button type="button" class="count-option-btn active" data-count="5">
             <span class="count-num">5</span>
-            <span class="count-label">الموصى به ⭐</span>
+            <span class="count-label" data-i18n="setupCountRecommended">الموصى به ⭐</span>
           </button>
           <button type="button" class="count-option-btn" data-count="10">
             <span class="count-num">10</span>
-            <span class="count-label">تحدي العباقرة 🏆</span>
+            <span class="count-label" data-i18n="setupCountGenius">تحدي العباقرة 🏆</span>
           </button>
         </div>
       </div>
 
       <button id="launchConfiguredQuizBtn" class="bouncy-start-btn">
-        <span>🚀</span> انطلق في الاختبار الآن!
+        <span>🚀</span> <span data-i18n="setupStartBtn">انطلق في الاختبار الآن!</span>
       </button>
     </div>
   </div>
