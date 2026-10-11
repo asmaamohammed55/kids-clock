@@ -48,6 +48,7 @@ class KidsClockApp {
     this.initConfetti();
 
     // تحديث الواجهة إلى الحالة المبدئية
+    document.body.setAttribute('data-mode', this.activeMode || 'explore');
     this.setTime(10, 10, false);
     this.updateSkyAndPeriod();
 
@@ -869,14 +870,15 @@ class KidsClockApp {
      -------------------------------------------------------------------------- */
   switchMode(mode, triggerSetup = false) {
     this.activeMode = mode;
+    document.body.setAttribute('data-mode', mode);
 
     this.tabExplore.classList.toggle('active', mode === 'explore');
     this.tabLessons.classList.toggle('active', mode === 'lessons');
     this.tabQuiz.classList.toggle('active', mode === 'quiz');
 
-    this.exploreView.style.display = mode === 'explore' ? 'block' : 'none';
-    this.lessonsView.style.display = mode === 'lessons' ? 'block' : 'none';
-    this.quizView.style.display = mode === 'quiz' ? 'block' : 'none';
+    if (this.exploreView) this.exploreView.style.display = mode === 'explore' ? 'block' : 'none';
+    if (this.lessonsView) this.lessonsView.style.display = mode === 'lessons' ? 'block' : 'none';
+    if (this.quizView) this.quizView.style.display = mode === 'quiz' ? 'block' : 'none';
 
     this.playTickSound();
 
@@ -901,23 +903,34 @@ class KidsClockApp {
   /* تشغيل محطات التعلم التفاعلية */
   runLesson(lessonId) {
     this.playChimeSound();
+    const lessonTitleEl = document.getElementById('activeLessonTitle');
+    const lessonDescEl = document.getElementById('activeLessonDesc');
+
     switch (lessonId) {
       case 1:
         this.setTime(3, 0);
+        if (lessonTitleEl) lessonTitleEl.textContent = 'المحطة 1: عقرب الساعات (الأزرق القصير)';
+        if (lessonDescEl) lessonDescEl.innerHTML = 'تعرف على العقرب الأزرق القصير والبطيء كالسّلحفاة الذي يدور بهدوء ويخبرنا بالساعة الحالية.';
         this.setMascotMessage('👀 راقب <strong>العقرب الأزرق القصير</strong>، هو عقرب الساعات! يدور ببطء ويشير الآن إلى الرقم 3.');
         break;
       case 2:
         this.setTime(12, 15);
+        if (lessonTitleEl) lessonTitleEl.textContent = 'المحطة 2: عقرب الدقائق (البرتقالي السريع)';
+        if (lessonDescEl) lessonDescEl.innerHTML = 'العقرب البرتقالي طويل ونشيط كالأرنب، يكمل دورة كاملة مدتها 60 دقيقة في كل ساعة!';
         this.setMascotMessage('⚡ راقب <strong>العقرب البرتقالي الطويل</strong>، هو عقرب الدقائق السريع! يكمل دورة كاملة كل 60 دقيقة.');
         break;
       case 3:
         this.setTime(5, 0);
+        if (lessonTitleEl) lessonTitleEl.textContent = 'المحطة 3: الساعة تماماً (عند الرقم 12)';
+        if (lessonDescEl) lessonDescEl.innerHTML = 'عندما يقف العقرب البرتقالي الطويل على 12 بالضبط في الأعلى، تكون الدقائق صفر والساعة تماماً :00!';
         this.setMascotMessage('🔔 عندما يقف العقرب الطويل عند <strong>12</strong>، تكون الساعة <strong>تماماً</strong> (هنا الساعة 5:00 تماماً).');
         break;
       case 4:
         this.showPizzaSector = true;
         this.toggleSectorBtn.classList.add('active');
         this.setTime(4, 30);
+        if (lessonTitleEl) lessonTitleEl.textContent = 'المحطة 4: نصف الساعة والربع (شريحة البيتزا)';
+        if (lessonDescEl) lessonDescEl.innerHTML = 'الرقم 6 يعني نصف ساعة (:30 دقيقة)، والرقم 3 يعني ربع ساعة (:15 دقيقة) تماماً كشريحة بيتزا!';
         this.setMascotMessage('🍕 عندما يقف العقرب الطويل عند <strong>6</strong>، تكون الساعة <strong>والنصف (:30)</strong> لأنها تقسم الدائرة إلى نصفين متساويين!');
         break;
       case 5:
@@ -925,6 +938,8 @@ class KidsClockApp {
         this.toggleMinutesGuideBtn.classList.add('active');
         document.getElementById('minuteNumbersGuide').style.display = 'block';
         this.setTime(8, 20);
+        if (lessonTitleEl) lessonTitleEl.textContent = 'المحطة 5: قفزات الأرنب الخماسية (5، 10، 15..)';
+        if (lessonDescEl) lessonDescEl.innerHTML = 'بين كل رقم وسابقه 5 دقائق كاملة! اضرب الرقم في 5 (مثلاً 4 × 5 = 20 دقيقة) لتعرف الدقائق بسرعة.';
         this.setMascotMessage('🦘 قفزات الأرنب: كل رقم يساوي 5 دقائق! الرقم 1 = 5، الرقم 2 = 10، الرقم 3 = 15، والرقم 4 = 20 دقيقة!');
         break;
     }

@@ -22,13 +22,13 @@
   </div>
 
   <div class="app-container">
-    <!-- الشريط العلوي -->
+    <!-- الشريط العلوي المدمج فائق الأناقة والجاذبية للأطفال -->
     <header class="app-header">
       <div class="logo-area">
         <span class="logo-icon">⏰</span>
-        <div>
+        <div class="logo-title-group">
           <h1 class="logo-title">جزيرة الوقت</h1>
-          <p class="logo-subtitle">مغامرة الأبطال لاكتشاف أسرار الساعة</p>
+          <span class="logo-subtitle hide-on-mobile">مغامرة تعلّم الساعة للأبطال</span>
         </div>
       </div>
 
@@ -41,10 +41,9 @@
         <div class="stat-badge stars-badge" title="نجوم الشجاعة المجمعة">
           <span class="star-icon">⭐</span>
           <span id="starCounter" class="stat-number">0</span>
-          <span class="stat-label">نجوم</span>
         </div>
         <button id="testCelebrationBtn" class="celebration-test-btn" title="اضغط لتجربة ومعاينة الاحتفال الكبير فوراً!">
-          <span>🎉</span> احتفال الأبطال!
+          <span>🎉</span> <span class="hide-on-mobile">احتفال!</span>
         </button>
         <button id="soundToggleBtn" class="icon-btn" title="كتم / تفعيل الصوت">
           <span id="soundIcon">🔊</span>
@@ -68,50 +67,81 @@
       </button>
     </nav>
 
-    <!-- مساحة العمل الرئيسية -->
-    <main class="main-stage">
+    <!-- مساحة العمل الرئيسية الموحدة والذكية -->
+    <main class="main-unified-stage">
 
-      <!-- شخصية تكتك المرشدة ومربّع الحديث -->
-      <section class="mascot-section">
-        <div class="mascot-bubble" id="mascotSpeech">
-          <p id="speechText">أهلاً يا بطل! أنا صديقك <strong>«تكتُك»</strong>. اسحب العقارب بإصبعك أو الماوس وشاهد ماذا
-            يحدث!</p>
-          <button id="speakButton" class="mini-speech-btn" title="استمع لصوت تكتك">🔊 استمع</button>
-        </div>
-        <div class="mascot-avatar" id="mascotAvatar" title="صديقك تكتك">
-          <div class="mascot-body">
-            <div class="mascot-face">
-              <div class="eye eye-left">
-                <div class="pupil"></div>
-              </div>
-              <div class="eye eye-right">
-                <div class="pupil"></div>
-              </div>
-              <div class="mouth smile"></div>
-              <div class="blush blush-left"></div>
-              <div class="blush blush-right"></div>
+      <!-- ================= 1. المنطقة العلوية (قبل الساعة مباشرة) ================= -->
+      <section class="top-mode-area">
+
+        <!-- في وضع التحدي: السؤال في قمة الشاشة فوق الساعة مباشرة وبشكل بارز جداً -->
+        <div id="quizHeaderCard" class="mode-element mode-for-quiz quiz-top-card">
+          <div class="quiz-status-row">
+            <div class="quiz-streak">
+              <span>السؤال: <strong id="questionNumber">1</strong> / <span id="totalQuestionsNumber">5</span></span>
             </div>
-            <div class="mascot-bell-left"></div>
-            <div class="mascot-bell-right"></div>
-            <div class="mascot-foot-left"></div>
-            <div class="mascot-foot-right"></div>
+            <div class="quiz-progress-track">
+              <div class="quiz-progress-bar" id="quizProgressBar" style="width: 20%;"></div>
+            </div>
+            <button id="btnRestartQuizSetup" class="pill-btn mini-pill quiz-settings-pill" title="تغيير عدد الأسئلة أو اسم البطل">
+              ⚙️ إعداد
+            </button>
+          </div>
+          <div class="quiz-question-box">
+            <span class="question-tag">🎯 مهمتك يا بطل:</span>
+            <h2 class="question-prompt" id="quizQuestionText">اضبط عقارب الساعة على: <strong>الساعة 3:00 تماماً</strong></h2>
           </div>
         </div>
+
+        <!-- في وضع الاستكشاف: حديث تكتك اللطيف مع أفاتار مصغر مرح -->
+        <div id="exploreMascotCard" class="mode-element mode-for-explore mascot-top-card">
+          <div class="mascot-mini-avatar" id="mascotAvatar" title="صديقك تكتك">
+            <div class="mascot-body">
+              <div class="mascot-face">
+                <div class="eye eye-left"><div class="pupil"></div></div>
+                <div class="eye eye-right"><div class="pupil"></div></div>
+                <div class="mouth smile"></div>
+                <div class="blush blush-left"></div>
+                <div class="blush blush-right"></div>
+              </div>
+              <div class="mascot-bell-left"></div>
+              <div class="mascot-bell-right"></div>
+              <div class="mascot-foot-left"></div>
+              <div class="mascot-foot-right"></div>
+            </div>
+          </div>
+          <div class="mascot-bubble" id="mascotSpeech">
+            <p id="speechText">أهلاً يا بطل! أنا صديقك <strong>«تكتُك»</strong>. اسحب العقارب بإصبعك وشاهد ماذا يحدث!</p>
+            <button id="speakButton" class="mini-speech-btn" title="استمع لصوت تكتك">🔊 استمع</button>
+          </div>
+        </div>
+
+        <!-- في وضع الدروس: شريط المحطات التعليمية السريعة -->
+        <div id="lessonsHeaderCard" class="mode-element mode-for-lessons lessons-top-card">
+          <div class="lessons-chips-row">
+            <button class="lesson-card lesson-chip active" data-lesson="1"><span class="chip-icon">🐢</span><span>1. الساعات</span></button>
+            <button class="lesson-card lesson-chip" data-lesson="2"><span class="chip-icon">🐇</span><span>2. الدقائق</span></button>
+            <button class="lesson-card lesson-chip" data-lesson="3"><span class="chip-icon">🔔</span><span>3. تماماً</span></button>
+            <button class="lesson-card lesson-chip" data-lesson="4"><span class="chip-icon">🍕</span><span>4. النصف والربع</span></button>
+            <button class="lesson-card lesson-chip" data-lesson="5"><span class="chip-icon">🦘</span><span>5. الخمسات</span></button>
+          </div>
+        </div>
+
       </section>
 
-      <!-- لوحة الساعة الكرتونية التفاعلية -->
-      <section class="clock-stage">
+      <!-- ================= 2. منطقة الساعة المركزية (قلب الشاشة) ================= -->
+      <section class="clock-stage-area">
 
         <!-- أدوات المساعدة البصرية حول الساعة -->
         <div class="clock-helpers-bar">
           <button id="toggleMinutesGuideBtn" class="pill-btn active">
-            <span>💡</span> أرقام الدقائق (05, 10, 15..)
+            <span>💡</span> أرقام الدقائق (05, 10..)
           </button>
           <button id="toggleSectorBtn" class="pill-btn">
             <span>🍕</span> شريحة النصف والربع
           </button>
         </div>
 
+        <!-- إطار الساعة التفاعلي الـ SVG -->
         <div class="clock-wrapper">
           <svg id="interactiveClock" viewBox="0 0 400 400" class="svg-clock">
             <defs>
@@ -163,29 +193,26 @@
 
             <!-- عقرب الساعات (القصير - الأزرق) -->
             <g id="hourHandGroup" class="hand-group hour-hand-group">
-              <rect x="189" y="85" width="22" height="135" rx="11" fill="url(#hourHandGrad)"
-                filter="url(#softShadow)" />
-              <!-- سهم أو زخرفة لطيفة في طرف العقرب -->
+              <rect x="189" y="85" width="22" height="135" rx="11" fill="url(#hourHandGrad)" filter="url(#softShadow)" />
               <path d="M200 65 L215 90 L185 90 Z" fill="#1d4ed8" />
               <text x="200" y="145" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">ساعة</text>
             </g>
 
             <!-- عقرب الدقائق (الطويل - البرتقالي) -->
             <g id="minuteHandGroup" class="hand-group minute-hand-group">
-              <rect x="192" y="45" width="16" height="175" rx="8" fill="url(#minuteHandGrad)"
-                filter="url(#softShadow)" />
+              <rect x="192" y="45" width="16" height="175" rx="8" fill="url(#minuteHandGrad)" filter="url(#softShadow)" />
               <path d="M200 25 L213 50 L187 50 Z" fill="#ea580c" />
               <text x="200" y="105" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">دقيقة</text>
             </g>
 
-            <!-- مركز الساعة (المسمار الأوسط اللطيف) -->
+            <!-- مركز الساعة (المسمار الأوسط) -->
             <circle cx="200" cy="200" r="14" fill="#1e293b" />
             <circle cx="200" cy="200" r="9" fill="#facc15" />
             <circle cx="200" cy="200" r="4" fill="#ffffff" />
           </svg>
         </div>
 
-        <!-- الشاشة الرقمية والوصف اللغوي بالعربية -->
+        <!-- الشاشة الرقمية والوصف اللغوي المدمج -->
         <div class="time-readout-card">
           <div class="digital-box">
             <span class="digital-label">الساعة الرقمية</span>
@@ -198,105 +225,24 @@
           </div>
 
           <div class="arabic-phrase-box">
-            <span class="phrase-label">كيف ننطقها بالعربية؟</span>
+            <span class="phrase-label">نطقها بالعربية</span>
             <div class="arabic-phrase" id="arabicTimePhrase">الساعة الثانية عشرة تماماً</div>
           </div>
         </div>
 
-        <!-- أزرار القفز السريع الممتعة -->
-        <div class="quick-adjust-bar">
-          <button class="quick-btn" data-add-mins="60">+1 ساعة</button>
-          <button class="quick-btn" data-add-mins="30">+30 دقيقة (نصف)</button>
-          <button class="quick-btn" data-add-mins="15">+15 دقيقة (ربع)</button>
-          <button class="quick-btn" data-add-mins="5">+5 دقائق</button>
-          <button class="quick-btn reset-btn" id="btnNowTime">الوقت الحالي الآن ⚡</button>
-        </div>
-
       </section>
 
-      <!-- لوحة التحكم بالأنماط: وضع الدروس أو التحدي -->
-      <section class="side-panel" id="sidePanel">
+      <!-- ================= 3. المنطقة السفلية (أسفل الساعة مباشرة) ================= -->
+      <section class="bottom-mode-area">
 
-        <!-- لوحة الدروس التفاعلية -->
-        <div class="panel-card lessons-view" id="lessonsView" style="display: none;">
-          <h2 class="panel-title">📚 محطات التعلم الذكية</h2>
-          <div class="lessons-list">
-
-            <div class="lesson-card active" data-lesson="1">
-              <div class="lesson-icon">🐢</div>
-              <div class="lesson-info">
-                <h3>المحطة 1: عقرب الساعات الكسول</h3>
-                <p>تعرف على العقرب الأزرق القصير والبطيء كالسّلحفاة.</p>
-              </div>
-              <button class="play-lesson-btn">جرّب</button>
-            </div>
-
-            <div class="lesson-card" data-lesson="2">
-              <div class="lesson-icon">🐇</div>
-              <div class="lesson-info">
-                <h3>المحطة 2: عقرب الدقائق السريع</h3>
-                <p>العقرب البرتقالي الطويل السريع كالأرنب الرشيق.</p>
-              </div>
-              <button class="play-lesson-btn">جرّب</button>
-            </div>
-
-            <div class="lesson-card" data-lesson="3">
-              <div class="lesson-icon">🔔</div>
-              <div class="lesson-info">
-                <h3>المحطة 3: الساعة تماماً (O'clock)</h3>
-                <p>عندما يقف العقرب الطويل فوق الرقم 12 دائماً!</p>
-              </div>
-              <button class="play-lesson-btn">جرّب</button>
-            </div>
-
-            <div class="lesson-card" data-lesson="4">
-              <div class="lesson-icon">🍕</div>
-              <div class="lesson-info">
-                <h3>المحطة 4: النصف والربع (:30 و :15)</h3>
-                <p>قسّم الساعة كما تقسم شريحة البيتزا اللذيذة!</p>
-              </div>
-              <button class="play-lesson-btn">جرّب</button>
-            </div>
-
-            <div class="lesson-card" data-lesson="5">
-              <div class="lesson-icon">🦘</div>
-              <div class="lesson-info">
-                <h3>المحطة 5: قفزات الخمسات (+5 دقائق)</h3>
-                <p>كل رقم على الساعة يخبئ وراءه 5 دقائق سرية!</p>
-              </div>
-              <button class="play-lesson-btn">جرّب</button>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- لوحة التحديات والاختبارات الحماسية -->
-        <div class="panel-card quiz-view" id="quizView" style="display: none;">
-          <div class="quiz-header">
-            <h2 class="panel-title">🎯 تحدي بطل التوقيت!</h2>
-            <div class="quiz-header-controls">
-              <div class="quiz-streak">
-                <span>السؤال: <strong id="questionNumber">1</strong> / <span id="totalQuestionsNumber">5</span></span>
-              </div>
-              <button id="btnRestartQuizSetup" class="pill-btn mini-pill quiz-settings-pill"
-                title="تغيير عدد الأسئلة أو اسم البطل">
-                ⚙️ إعداد الاختبار
-              </button>
-            </div>
+        <!-- في وضع التحدي: أزرار التفاعل والإجابة في متناول يد الطفل فوراً -->
+        <div id="quizBottomCard" class="mode-element mode-for-quiz quiz-bottom-card">
+          <div class="quiz-feedback-box" id="quizFeedback" style="display: none;">
+            <div class="feedback-icon" id="feedbackIcon">🎉</div>
+            <div class="feedback-text" id="feedbackText">أحسنت صنعاً يا بطل! إجابة صحيحة 100%!</div>
           </div>
 
-          <!-- شريط تقدم الاختبار -->
-          <div class="quiz-progress-track">
-            <div class="quiz-progress-bar" id="quizProgressBar" style="width: 20%;"></div>
-          </div>
-
-          <div class="quiz-question-box">
-            <span class="question-tag">المهمة المطلوبة منك:</span>
-            <h3 class="question-prompt" id="quizQuestionText">اضبط عقارب الساعة على: <strong>الساعة 3:00 تماماً</strong>
-            </h3>
-          </div>
-
-          <div class="quiz-actions">
+          <div class="quiz-main-actions">
             <button id="checkAnswerBtn" class="primary-action-btn">
               <span>🚀</span> تحقّق من إجابتي يا تكتك!
             </button>
@@ -306,24 +252,28 @@
             <button id="newRoundBtn" class="accent-action-btn" style="display: none;">
               <span>🎲</span> جولة تحدي جديدة بأوقات جديدة!
             </button>
-            <button id="shuffleQuestionBtn" class="text-action-btn" title="تغيير هذا الوقت بوقت عشوائي آخر">
-              🔄 جرّب وقتاً عشوائياً آخر
-            </button>
-            <button id="autoSetClockBtn" class="text-action-btn assist-btn"
-              title="دع تكتك يضبط العقارب للمساعدة والتعلم">
-              🪄 اضبطها لي يا تكتك (مساعدة)
-            </button>
           </div>
 
-          <div class="quiz-feedback-box" id="quizFeedback" style="display: none;">
-            <div class="feedback-icon" id="feedbackIcon">🎉</div>
-            <div class="feedback-text" id="feedbackText">أحسنت صنعاً يا بطل! إجابة صحيحة 100%!</div>
+          <div class="quiz-helper-actions-row">
+            <button id="autoSetClockBtn" class="pill-btn assist-btn" title="دع تكتك يضبط العقارب للمساعدة والتعلم">
+              🪄 مساعدة تكتك
+            </button>
+            <button id="shuffleQuestionBtn" class="pill-btn shuffle-btn" title="تغيير هذا الوقت بوقت عشوائي آخر">
+              🔄 وقت آخر
+            </button>
           </div>
         </div>
 
-        <!-- لوحة المعلومات السريعة في وضع الاستكشاف -->
-        <div class="panel-card explore-view" id="exploreView">
-          <h2 class="panel-title">🌟 كيف تلعب وتستكشف؟</h2>
+        <!-- في وضع الاستكشاف: أزرار القفز السريع والبطاقات الإرشادية -->
+        <div id="exploreBottomCard" class="mode-element mode-for-explore explore-bottom-card">
+          <div class="quick-adjust-bar">
+            <button class="quick-btn" data-add-mins="60">+1 ساعة</button>
+            <button class="quick-btn" data-add-mins="30">+30 دقيقة (نصف)</button>
+            <button class="quick-btn" data-add-mins="15">+15 دقيقة (ربع)</button>
+            <button class="quick-btn" data-add-mins="5">+5 دقائق</button>
+            <button class="quick-btn reset-btn" id="btnNowTime">الوقت الحالي الآن ⚡</button>
+          </div>
+
           <div class="tips-grid">
             <div class="tip-card">
               <span class="tip-badge blue">العقرب الأزرق</span>
@@ -335,16 +285,29 @@
             </div>
             <div class="tip-card">
               <span class="tip-badge purple">سر البيتزا 🍕</span>
-              <p>اضغط زر "شريحة النصف والربع" في الأعلى لتشاهد تلوين الوقت كأنه كعكة شهية!</p>
+              <p>شريحة البيتزا توضح النصف والربع بتقسيم الدائرة بشكل ملون شهي!</p>
             </div>
             <div class="tip-card">
               <span class="tip-badge yellow">الشمس والقمر ☀️🌙</span>
-              <p>راقب السماء في الخلفية؛ ستشرق الشمس نهاراً وتظهر النجوم ليلاً بحسب ساعتك!</p>
+              <p>راقب السماء في الخلفية؛ ستشرق الشمس نهاراً وتظهر النجوم ليلاً!</p>
             </div>
           </div>
         </div>
 
+        <!-- في وضع الدروس: شرح المحطة الحالية -->
+        <div id="lessonsBottomCard" class="mode-element mode-for-lessons lessons-bottom-card">
+          <div class="active-lesson-box" id="activeLessonBox">
+            <h3 class="active-lesson-title" id="activeLessonTitle">المحطة 1: عقرب الساعات الكسول</h3>
+            <p class="active-lesson-desc" id="activeLessonDesc">تعرف على العقرب الأزرق القصير والبطيء كالسّلحفاة الذي يدور ببطء ويخبرنا بالساعة.</p>
+          </div>
+        </div>
+
       </section>
+
+      <!-- حاويات توافقية للربط القديم في JS -->
+      <div id="lessonsView" style="display: none;"></div>
+      <div id="quizView" style="display: none;"></div>
+      <div id="exploreView" style="display: none;"></div>
 
     </main>
 
