@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جزيرة الوقت ⏰ مغامرة تعلّم الساعة للأبطال</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- خلفية تفاعلية تتغير بين النهار والليل والغيوم المتحركة -->
+  <div class="sky-background" id="skyBg">
+    <div class="celestial-body" id="celestialBody" title="الشمس أو القمر"></div>
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+    <div class="stars-layer" id="starsLayer"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- الشريط العلوي -->
+    <header class="app-header">
+      <div class="logo-area">
+        <span class="logo-icon">⏰</span>
+        <div>
+          <h1 class="logo-title">جزيرة الوقت</h1>
+          <p class="logo-subtitle">مغامرة الأبطال لاكتشاف أسرار الساعة</p>
+        </div>
+      </div>
+
+      <div class="header-stats">
+        <div class="child-name-badge" id="childNameBadge" title="اسم البطل - اضغط للتعديل">
+          <span class="crown-icon">👑</span>
+          <span id="childNameDisplay">البطل</span>
+          <button id="editNameBtn" class="mini-edit-btn" title="تغيير الاسم">✏️</button>
+        </div>
+        <div class="stat-badge stars-badge" title="نجوم الشجاعة المجمعة">
+          <span class="star-icon">⭐</span>
+          <span id="starCounter" class="stat-number">0</span>
+          <span class="stat-label">نجوم</span>
+        </div>
+        <button id="testCelebrationBtn" class="celebration-test-btn" title="اضغط لتجربة ومعاينة الاحتفال الكبير فوراً!">
+          <span>🎉</span> احتفال الأبطال!
+        </button>
+        <button id="soundToggleBtn" class="icon-btn" title="كتم / تفعيل الصوت">
+          <span id="soundIcon">🔊</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- شريط اختيار الأنماط (استكشاف / دروس / تحديات) -->
+    <nav class="modes-nav">
+      <button class="mode-tab active" data-mode="explore" id="tabExplore">
+        <span class="tab-icon">🧭</span>
+        <span>العب واستكشف</span>
+      </button>
+      <button class="mode-tab" data-mode="lessons" id="tabLessons">
+        <span class="tab-icon">🎓</span>
+        <span>المحطات التعليمية</span>
+      </button>
+      <button class="mode-tab" data-mode="quiz" id="tabQuiz">
+        <span class="tab-icon">🏆</span>
+        <span>تحدي الأبطال</span>
+      </button>
+    </nav>
+
+    <!-- مساحة العمل الرئيسية -->
+    <main class="main-stage">
+
+      <!-- شخصية تكتك المرشدة ومربّع الحديث -->
+      <section class="mascot-section">
+        <div class="mascot-bubble" id="mascotSpeech">
+          <p id="speechText">أهلاً يا بطل! أنا صديقك <strong>«تكتُك»</strong>. اسحب العقارب بإصبعك أو الماوس وشاهد ماذا
+            يحدث!</p>
+          <button id="speakButton" class="mini-speech-btn" title="استمع لصوت تكتك">🔊 استمع</button>
+        </div>
+        <div class="mascot-avatar" id="mascotAvatar" title="صديقك تكتك">
+          <div class="mascot-body">
+            <div class="mascot-face">
+              <div class="eye eye-left">
+                <div class="pupil"></div>
+              </div>
+              <div class="eye eye-right">
+                <div class="pupil"></div>
+              </div>
+              <div class="mouth smile"></div>
+              <div class="blush blush-left"></div>
+              <div class="blush blush-right"></div>
+            </div>
+            <div class="mascot-bell-left"></div>
+            <div class="mascot-bell-right"></div>
+            <div class="mascot-foot-left"></div>
+            <div class="mascot-foot-right"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- لوحة الساعة الكرتونية التفاعلية -->
+      <section class="clock-stage">
+
+        <!-- أدوات المساعدة البصرية حول الساعة -->
+        <div class="clock-helpers-bar">
+          <button id="toggleMinutesGuideBtn" class="pill-btn active">
+            <span>💡</span> أرقام الدقائق (05, 10, 15..)
+          </button>
+          <button id="toggleSectorBtn" class="pill-btn">
+            <span>🍕</span> شريحة النصف والربع
+          </button>
+        </div>
+
+        <div class="clock-wrapper">
+          <svg id="interactiveClock" viewBox="0 0 400 400" class="svg-clock">
+            <defs>
+              <!-- فلاتر وظلال تمنح الساعة مظهراً ناعماً وثلاثي الأبعاد -->
+              <filter id="softShadow" x="-10%" y="-10%" width="130%" height="130%">
+                <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#1e293b" flood-opacity="0.15" />
+              </filter>
+              <filter id="glowEffect" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+              <!-- تدرجات الألوان الحيوية -->
+              <linearGradient id="dialGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="100%" stop-color="#f8fafc" />
+              </linearGradient>
+              <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#38bdf8" />
+                <stop offset="50%" stop-color="#6366f1" />
+                <stop offset="100%" stop-color="#a855f7" />
+              </linearGradient>
+              <linearGradient id="hourHandGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#3b82f6" />
+                <stop offset="100%" stop-color="#1d4ed8" />
+              </linearGradient>
+              <linearGradient id="minuteHandGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f97316" />
+                <stop offset="100%" stop-color="#ea580c" />
+              </linearGradient>
+            </defs>
+
+            <!-- الإطار الخارجي المتدرج -->
+            <circle cx="200" cy="200" r="190" fill="url(#rimGrad)" filter="url(#softShadow)" />
+            <circle cx="200" cy="200" r="172" fill="#e0e7ff" />
+            <!-- وجه الساعة الأبيض الناصع -->
+            <circle cx="200" cy="200" r="165" fill="url(#dialGrad)" />
+
+            <!-- طبقة تظليل شريحة الوقت (مثل قطعة البيتزا الملونة للنصف والربع) -->
+            <path id="pieSlice" class="pie-slice-path" d="" />
+
+            <!-- علامات الدقائق الصغيرة (60 شرطة) -->
+            <g id="minuteTicks" class="ticks-group"></g>
+
+            <!-- أرقام الدقائق الخارجية المساعدة للأطفال (05، 10، 15...) -->
+            <g id="minuteNumbersGuide" class="minute-guides-group"></g>
+
+            <!-- أرقام الساعات الكبيرة الواضحة (1 إلى 12) -->
+            <g id="hourNumbers" class="hour-numbers-group"></g>
+
+            <!-- عقرب الساعات (القصير - الأزرق) -->
+            <g id="hourHandGroup" class="hand-group hour-hand-group">
+              <rect x="189" y="85" width="22" height="135" rx="11" fill="url(#hourHandGrad)"
+                filter="url(#softShadow)" />
+              <!-- سهم أو زخرفة لطيفة في طرف العقرب -->
+              <path d="M200 65 L215 90 L185 90 Z" fill="#1d4ed8" />
+              <text x="200" y="145" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">ساعة</text>
+            </g>
+
+            <!-- عقرب الدقائق (الطويل - البرتقالي) -->
+            <g id="minuteHandGroup" class="hand-group minute-hand-group">
+              <rect x="192" y="45" width="16" height="175" rx="8" fill="url(#minuteHandGrad)"
+                filter="url(#softShadow)" />
+              <path d="M200 25 L213 50 L187 50 Z" fill="#ea580c" />
+              <text x="200" y="105" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">دقيقة</text>
+            </g>
+
+            <!-- مركز الساعة (المسمار الأوسط اللطيف) -->
+            <circle cx="200" cy="200" r="14" fill="#1e293b" />
+            <circle cx="200" cy="200" r="9" fill="#facc15" />
+            <circle cx="200" cy="200" r="4" fill="#ffffff" />
+          </svg>
+        </div>
+
+        <!-- الشاشة الرقمية والوصف اللغوي بالعربية -->
+        <div class="time-readout-card">
+          <div class="digital-box">
+            <span class="digital-label">الساعة الرقمية</span>
+            <div class="digital-display" id="digitalClockDisplay">
+              <span id="digitalHours" class="digit hour-digit">12</span>
+              <span class="digit-separator">:</span>
+              <span id="digitalMinutes" class="digit min-digit">00</span>
+              <span id="digitalPeriod" class="period-pill">صباحاً ☀️</span>
+            </div>
+          </div>
+
+          <div class="arabic-phrase-box">
+            <span class="phrase-label">كيف ننطقها بالعربية؟</span>
+            <div class="arabic-phrase" id="arabicTimePhrase">الساعة الثانية عشرة تماماً</div>
+          </div>
+        </div>
+
+        <!-- أزرار القفز السريع الممتعة -->
+        <div class="quick-adjust-bar">
+          <button class="quick-btn" data-add-mins="60">+1 ساعة</button>
+          <button class="quick-btn" data-add-mins="30">+30 دقيقة (نصف)</button>
+          <button class="quick-btn" data-add-mins="15">+15 دقيقة (ربع)</button>
+          <button class="quick-btn" data-add-mins="5">+5 دقائق</button>
+          <button class="quick-btn reset-btn" id="btnNowTime">الوقت الحالي الآن ⚡</button>
+        </div>
+
+      </section>
+
+      <!-- لوحة التحكم بالأنماط: وضع الدروس أو التحدي -->
+      <section class="side-panel" id="sidePanel">
+
+        <!-- لوحة الدروس التفاعلية -->
+        <div class="panel-card lessons-view" id="lessonsView" style="display: none;">
+          <h2 class="panel-title">📚 محطات التعلم الذكية</h2>
+          <div class="lessons-list">
+
+            <div class="lesson-card active" data-lesson="1">
+              <div class="lesson-icon">🐢</div>
+              <div class="lesson-info">
+                <h3>المحطة 1: عقرب الساعات الكسول</h3>
+                <p>تعرف على العقرب الأزرق القصير والبطيء كالسّلحفاة.</p>
+              </div>
+              <button class="play-lesson-btn">جرّب</button>
+            </div>
+
+            <div class="lesson-card" data-lesson="2">
+              <div class="lesson-icon">🐇</div>
+              <div class="lesson-info">
+                <h3>المحطة 2: عقرب الدقائق السريع</h3>
+                <p>العقرب البرتقالي الطويل السريع كالأرنب الرشيق.</p>
+              </div>
+              <button class="play-lesson-btn">جرّب</button>
+            </div>
+
+            <div class="lesson-card" data-lesson="3">
+              <div class="lesson-icon">🔔</div>
+              <div class="lesson-info">
+                <h3>المحطة 3: الساعة تماماً (O'clock)</h3>
+                <p>عندما يقف العقرب الطويل فوق الرقم 12 دائماً!</p>
+              </div>
+              <button class="play-lesson-btn">جرّب</button>
+            </div>
+
+            <div class="lesson-card" data-lesson="4">
+              <div class="lesson-icon">🍕</div>
+              <div class="lesson-info">
+                <h3>المحطة 4: النصف والربع (:30 و :15)</h3>
+                <p>قسّم الساعة كما تقسم شريحة البيتزا اللذيذة!</p>
+              </div>
+              <button class="play-lesson-btn">جرّب</button>
+            </div>
+
+            <div class="lesson-card" data-lesson="5">
+              <div class="lesson-icon">🦘</div>
+              <div class="lesson-info">
+                <h3>المحطة 5: قفزات الخمسات (+5 دقائق)</h3>
+                <p>كل رقم على الساعة يخبئ وراءه 5 دقائق سرية!</p>
+              </div>
+              <button class="play-lesson-btn">جرّب</button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- لوحة التحديات والاختبارات الحماسية -->
+        <div class="panel-card quiz-view" id="quizView" style="display: none;">
+          <div class="quiz-header">
+            <h2 class="panel-title">🎯 تحدي بطل التوقيت!</h2>
+            <div class="quiz-header-controls">
+              <div class="quiz-streak">
+                <span>السؤال: <strong id="questionNumber">1</strong> / <span id="totalQuestionsNumber">5</span></span>
+              </div>
+              <button id="btnRestartQuizSetup" class="pill-btn mini-pill quiz-settings-pill"
+                title="تغيير عدد الأسئلة أو اسم البطل">
+                ⚙️ إعداد الاختبار
+              </button>
+            </div>
+          </div>
+
+          <!-- شريط تقدم الاختبار -->
+          <div class="quiz-progress-track">
+            <div class="quiz-progress-bar" id="quizProgressBar" style="width: 20%;"></div>
+          </div>
+
+          <div class="quiz-question-box">
+            <span class="question-tag">المهمة المطلوبة منك:</span>
+            <h3 class="question-prompt" id="quizQuestionText">اضبط عقارب الساعة على: <strong>الساعة 3:00 تماماً</strong>
+            </h3>
+          </div>
+
+          <div class="quiz-actions">
+            <button id="checkAnswerBtn" class="primary-action-btn">
+              <span>🚀</span> تحقّق من إجابتي يا تكتك!
+            </button>
+            <button id="nextQuestionBtn" class="secondary-action-btn" style="display: none;">
+              السؤال التالي ⬅️
+            </button>
+            <button id="newRoundBtn" class="accent-action-btn" style="display: none;">
+              <span>🎲</span> جولة تحدي جديدة بأوقات جديدة!
+            </button>
+            <button id="shuffleQuestionBtn" class="text-action-btn" title="تغيير هذا الوقت بوقت عشوائي آخر">
+              🔄 جرّب وقتاً عشوائياً آخر
+            </button>
+            <button id="autoSetClockBtn" class="text-action-btn assist-btn"
+              title="دع تكتك يضبط العقارب للمساعدة والتعلم">
+              🪄 اضبطها لي يا تكتك (مساعدة)
+            </button>
+          </div>
+
+          <div class="quiz-feedback-box" id="quizFeedback" style="display: none;">
+            <div class="feedback-icon" id="feedbackIcon">🎉</div>
+            <div class="feedback-text" id="feedbackText">أحسنت صنعاً يا بطل! إجابة صحيحة 100%!</div>
+          </div>
+        </div>
+
+        <!-- لوحة المعلومات السريعة في وضع الاستكشاف -->
+        <div class="panel-card explore-view" id="exploreView">
+          <h2 class="panel-title">🌟 كيف تلعب وتستكشف؟</h2>
+          <div class="tips-grid">
+            <div class="tip-card">
+              <span class="tip-badge blue">العقرب الأزرق</span>
+              <p>هو <strong>عقرب الساعات</strong>: قصير وبطيء، يخبرك في أي ساعة نحن الآن.</p>
+            </div>
+            <div class="tip-card">
+              <span class="tip-badge orange">العقرب البرتقالي</span>
+              <p>هو <strong>عقرب الدقائق</strong>: طويل وسريع، يخبرك كم دقيقة مرت.</p>
+            </div>
+            <div class="tip-card">
+              <span class="tip-badge purple">سر البيتزا 🍕</span>
+              <p>اضغط زر "شريحة النصف والربع" في الأعلى لتشاهد تلوين الوقت كأنه كعكة شهية!</p>
+            </div>
+            <div class="tip-card">
+              <span class="tip-badge yellow">الشمس والقمر ☀️🌙</span>
+              <p>راقب السماء في الخلفية؛ ستشرق الشمس نهاراً وتظهر النجوم ليلاً بحسب ساعتك!</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- تذييل الصفحة (الفوتر الراقي) -->
+    <footer class="app-footer">
+      <div class="footer-card">
+        <div class="footer-badge">
+          <span class="heart-pulse">❤️</span>
+          <span class="footer-credit">صُنع بحب بواسطة <strong class="engineer-name">المهندسة أسماء محمد عبد
+              الرءوف</strong></span>
+        </div>
+        <p class="footer-quote">«الوقت هو أثمن ما نملك.. بالمتعة واللعب نبني عباقرة المستقبل» ⏰✨</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- حاوية البالونات الطائرة والاحتفالات الضخمة -->
+  <div id="balloonsContainer" class="balloons-container"></div>
+
+  <!-- حاوية الاحتفال بالأوراق والنجوم المتطايرة -->
+  <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+  <!-- نافذة الترحيب بالطفل وطلب اسمه -->
+  <div class="modal-overlay" id="nameModalOverlay">
+    <div class="name-modal-card">
+      <button class="modal-close-corner-btn" id="closeNameModalBtn" title="إغلاق النافذة" aria-label="إغلاق">✕</button>
+      <div class="modal-mascot-icon">⏰✨</div>
+      <h2 class="modal-title">أهلاً بك في جزيرة الوقت!</h2>
+      <p class="modal-desc">أنا صديقك <strong>«تكتُك»</strong>.. ما هو اسمك الجميل لنبدأ المغامرة معاً؟</p>
+
+      <form id="nameForm" class="name-form" onsubmit="event.preventDefault();">
+        <div class="input-wrapper">
+          <input type="text" id="childNameInput" class="child-name-input"
+            placeholder="اكتب اسمك هنا (مثال: عمر، مريم، يوسف..)" maxlength="20" autocomplete="off" required />
+        </div>
+        <button type="submit" id="saveNameBtn" class="bouncy-start-btn">
+          <span>🚀</span> انطلق في المغامرة!
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة التهنئة الكبرى عند إتمام الاختبار بنجاح -->
+  <div class="modal-overlay" id="grandCelebrationModal">
+    <div class="celebration-modal-card">
+      <button class="modal-close-corner-btn" id="closeCelebrationBtn" title="إغلاق النافذة"
+        aria-label="إغلاق">✕</button>
+      <div class="trophy-bounce">🏆🎉</div>
+      <h2 class="celebration-title" id="celebrationTitle">ألف مبروك يا بطل الأبطال!</h2>
+      <p class="celebration-subtitle" id="celebrationSubtitle">لقد أتممت الاختبار بنجاح باهر وتألقت في معرفة الوقت!</p>
+
+      <!-- بطاقة نتيجة الاختبار المكتمل -->
+      <div class="quiz-summary-box">
+        <div class="summary-stat-item">
+          <span class="summary-stat-icon">📝</span>
+          <span class="summary-stat-val" id="summaryQuestionsCount">5</span>
+          <span class="summary-stat-lbl">أسئلة منجزة</span>
+        </div>
+        <div class="summary-stat-item">
+          <span class="summary-stat-icon">⭐</span>
+          <span class="summary-stat-val" id="summaryStarsCount">+5</span>
+          <span class="summary-stat-lbl">نجوم ذهبية</span>
+        </div>
+        <div class="summary-stat-item">
+          <span class="summary-stat-icon">👑</span>
+          <span class="summary-stat-val" id="summaryBadgeEarned">ممتاز!</span>
+          <span class="summary-stat-lbl">التقييم</span>
+        </div>
+      </div>
+
+      <div class="celebration-stars-row">
+        <span class="huge-star">⭐</span>
+        <span class="huge-star">⭐</span>
+        <span class="huge-star">⭐</span>
+        <span class="huge-star">⭐</span>
+        <span class="huge-star">⭐</span>
+      </div>
+
+      <button id="startNewQuizFromPopupBtn" class="bouncy-start-btn">
+        <span>🚀</span> بدء اختبار جديد وتحدٍ ممتع!
+      </button>
+    </div>
+  </div>
+
+  <!-- نافذة إعداد الاختبار الجديد: التحقق من اسم الطفل وتحديد عدد الأسئلة -->
+  <div class="modal-overlay" id="quizSetupModal">
+    <div class="name-modal-card setup-modal-card">
+      <button class="modal-close-corner-btn" id="closeQuizSetupBtn" title="إغلاق النافذة" aria-label="إغلاق">✕</button>
+      <div class="modal-mascot-icon">🎮⏰</div>
+      <h2 class="modal-title">تجهيز الاختبار الجديد</h2>
+      <p class="modal-desc">اختر تفاصيل التحدي يا بطل لتنطلق في المغامرة!</p>
+
+      <!-- القسم 1: من هو البطل؟ (التحقق من الاسم أو تعديله) -->
+      <div class="setup-section">
+        <label class="setup-section-label" for="setupPlayerNameInput">👑 اسم البطل المشارك في الاختبار:</label>
+        <div class="input-wrapper">
+          <input type="text" id="setupPlayerNameInput" class="child-name-input" placeholder="اكتب اسم البطل هنا..."
+            maxlength="20" autocomplete="off" />
+        </div>
+        <p class="setup-input-hint">تأكد من اسمك لتسجيل كل نجومك وبطولاتك باسمك! ⭐</p>
+      </div>
+
+      <!-- القسم 2: كم عدد الأسئلة في الاختبار؟ -->
+      <div class="setup-section">
+        <label class="setup-section-label">🎯 كم عدد أسئلة هذا الاختبار؟</label>
+        <div class="question-count-options">
+          <button type="button" class="count-option-btn" data-count="3">
+            <span class="count-num">3</span>
+            <span class="count-label">تحدي سريع ⚡</span>
+          </button>
+          <button type="button" class="count-option-btn active" data-count="5">
+            <span class="count-num">5</span>
+            <span class="count-label">الموصى به ⭐</span>
+          </button>
+          <button type="button" class="count-option-btn" data-count="10">
+            <span class="count-num">10</span>
+            <span class="count-label">تحدي العباقرة 🏆</span>
+          </button>
+        </div>
+      </div>
+
+      <button id="launchConfiguredQuizBtn" class="bouncy-start-btn">
+        <span>🚀</span> انطلق في الاختبار الآن!
+      </button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
