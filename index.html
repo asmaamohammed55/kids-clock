@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="stories/story-engine.css">
 </head>
 
 <body>
@@ -310,6 +311,19 @@
 
         <!-- في وضع حكاية الأصدقاء: منصة مشغل القصة الكرتونية الناطقة -->
         <div id="lessonsBottomCard" class="mode-element mode-for-lessons lessons-bottom-card story-bottom-card">
+          
+          <!-- بطاقة الدخول المباشر لمسرح السينما الكرتونية التفاعلية -->
+          <div id="openCartoonCinemaBanner" class="cinema-banner-card" style="margin-bottom: 14px;">
+            <div class="banner-left-info">
+              <span class="banner-camera-icon">🎬🍿</span>
+              <div class="banner-texts">
+                <span class="banner-headline">مسرح سينما كرتون الساعة</span>
+                <span class="banner-sub">أفلام كرتونية متحركة وناطقة مع تكتك وسلحوف وأرنوب!</span>
+              </div>
+            </div>
+            <button type="button" class="banner-enter-btn"><span>▶️ دخول السينما</span></button>
+          </div>
+
           <div class="active-lesson-box story-console-box" id="activeLessonBox">
             <div class="story-title-row">
               <h3 class="active-lesson-title" id="activeLessonTitle">الفصل 1: لقاء سلحوف الهادئ (عقرب الساعات)</h3>
@@ -331,6 +345,9 @@
               </button>
               <button id="storyAnimateBtn" class="pill-btn story-animate-btn">
                 <span>🎬</span> <span data-i18n="storyAnimateBtn">شاهد الحركة</span>
+              </button>
+              <button id="openCinemaInlineBtn" class="pill-btn story-cinema-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-weight: 800;">
+                <span>🍿</span> <span>سينما الكرتون</span>
               </button>
             </div>
 
@@ -498,6 +515,170 @@
       </button>
     </div>
   </div>
+
+  <!-- ================= مسرح سينما الحكايات الكرتونية الناطقة ================= -->
+  <div class="cartoon-theater-modal" id="cartoonTheaterModal" role="dialog" aria-modal="true">
+    <div class="theater-stage-container">
+      
+      <!-- شريط العنوان وأزرار الخروج -->
+      <div class="theater-top-bar">
+        <div class="theater-logo-group">
+          <span class="theater-marquee-icon">🎬</span>
+          <span class="theater-title" id="theaterEpTitle">سينما كرتون الوقت</span>
+        </div>
+        <button class="theater-close-btn" id="theaterCloseBtn" title="إغلاق السينما" aria-label="إغلاق">✕</button>
+      </div>
+
+      <!-- شريط اختيار الحلقات الكرتونية (Carousel) -->
+      <div class="episodes-carousel-bar" id="episodesCarouselBar"></div>
+
+      <!-- خشبة المسرح الكرتوني المشهدي -->
+      <div class="theater-stage-canvas-area theme-day-forest" id="theaterStageArea">
+        <div class="stage-sky">
+          <div class="stage-sun"></div>
+          <div class="stage-cloud stage-cloud-1"></div>
+          <div class="stage-cloud stage-cloud-2"></div>
+        </div>
+
+        <div class="stage-ground"></div>
+
+        <!-- ساعة المسرح التفاعلية المزامنة -->
+        <div id="stageClockActor" class="stage-clock-actor">
+          <svg viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="92" fill="#ffffff" stroke="#facc15" stroke-width="8" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.15))"/>
+            <circle cx="100" cy="100" r="82" fill="#fefce8" stroke="#fef08a" stroke-width="2"/>
+            <text x="100" y="32" text-anchor="middle" font-size="16" font-weight="900" fill="#1e1b4b">12</text>
+            <text x="170" y="106" text-anchor="middle" font-size="16" font-weight="900" fill="#1e1b4b">3</text>
+            <text x="100" y="178" text-anchor="middle" font-size="16" font-weight="900" fill="#1e1b4b">6</text>
+            <text x="30" y="106" text-anchor="middle" font-size="16" font-weight="900" fill="#1e1b4b">9</text>
+            <!-- عقرب الساعات القصير (الأزرق) -->
+            <g id="stageHourHand" style="transform-origin: 100px 100px; transition: transform 0.4s ease;">
+              <rect x="94" y="45" width="12" height="60" rx="6" fill="#2563eb"/>
+              <path d="M100 35 L108 50 L92 50 Z" fill="#1d4ed8"/>
+            </g>
+            <!-- عقرب الدقائق الطويل (البرتقالي) -->
+            <g id="stageMinuteHand" style="transform-origin: 100px 100px; transition: transform 0.4s ease;">
+              <rect x="96" y="25" width="8" height="80" rx="4" fill="#f97316"/>
+              <path d="M100 15 L106 30 L94 30 Z" fill="#ea580c"/>
+            </g>
+            <circle cx="100" cy="100" r="8" fill="#1e1b4b"/>
+            <circle cx="100" cy="100" r="4" fill="#facc15"/>
+          </svg>
+        </div>
+
+        <!-- تكتك المنبه الكرتوني المعلم ⏰ -->
+        <div id="actorTiktuk" class="actor-character actor-tiktuk idle">
+          <svg viewBox="0 0 100 100">
+            <circle cx="28" cy="22" r="14" fill="#f59e0b" stroke="#b45309" stroke-width="2"/>
+            <circle cx="72" cy="22" r="14" fill="#f59e0b" stroke="#b45309" stroke-width="2"/>
+            <rect x="47" y="12" width="6" height="12" fill="#78716c" rx="2"/>
+            <circle cx="50" cy="12" r="5" fill="#44403c"/>
+            <ellipse cx="30" cy="88" rx="10" ry="6" fill="#f59e0b" stroke="#b45309" stroke-width="2"/>
+            <ellipse cx="70" cy="88" rx="10" ry="6" fill="#f59e0b" stroke="#b45309" stroke-width="2"/>
+            <circle cx="50" cy="54" r="36" fill="#fbbf24" stroke="#f59e0b" stroke-width="4"/>
+            <circle cx="50" cy="54" r="28" fill="#ffffff"/>
+            <circle cx="34" cy="58" r="5" fill="#f43f5e" opacity="0.45"/>
+            <circle cx="66" cy="58" r="5" fill="#f43f5e" opacity="0.45"/>
+            <ellipse cx="38" cy="48" rx="4.5" ry="6" fill="#1e293b"/>
+            <circle cx="39.5" cy="46" r="2" fill="#ffffff"/>
+            <ellipse cx="62" cy="48" rx="4.5" ry="6" fill="#1e293b"/>
+            <circle cx="63.5" cy="46" r="2" fill="#ffffff"/>
+            <path d="M42 58 Q50 67 58 58" fill="none" stroke="#e11d48" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <!-- سلحوف السلحفاة الكرتونية الهادئة 🐢 -->
+        <div id="actorTurtle" class="actor-character actor-turtle idle">
+          <svg viewBox="0 0 120 100">
+            <ellipse cx="30" cy="75" rx="12" ry="8" fill="#4ade80" stroke="#16a34a" stroke-width="2"/>
+            <ellipse cx="90" cy="75" rx="12" ry="8" fill="#4ade80" stroke="#16a34a" stroke-width="2"/>
+            <path d="M18 68 Q10 70 12 62 Q16 64 20 66 Z" fill="#4ade80" stroke="#16a34a" stroke-width="1.5"/>
+            <ellipse cx="60" cy="56" rx="42" ry="32" fill="#3b82f6" stroke="#1d4ed8" stroke-width="3"/>
+            <path d="M40 45 Q60 35 80 45 Q90 60 80 72 Q60 78 40 72 Q30 60 40 45 Z" fill="#60a5fa" opacity="0.6"/>
+            <circle cx="60" cy="56" r="10" fill="#93c5fd" opacity="0.8"/>
+            <circle cx="98" cy="48" r="16" fill="#86efac" stroke="#16a34a" stroke-width="2"/>
+            <circle cx="103" cy="44" r="3.5" fill="#0f172a"/>
+            <circle cx="104.5" cy="43" r="1.2" fill="#ffffff"/>
+            <path d="M98 54 Q104 59 110 52" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="96" cy="52" r="3" fill="#f43f5e" opacity="0.4"/>
+            <ellipse cx="98" cy="34" rx="10" ry="4" fill="#2563eb"/>
+            <path d="M92 34 Q98 24 104 34 Z" fill="#1d4ed8"/>
+          </svg>
+        </div>
+
+        <!-- أرنوب الأرنب الكرتوني النفاث 🐇 -->
+        <div id="actorBunny" class="actor-character actor-bunny idle">
+          <svg viewBox="0 0 120 120">
+            <path d="M30 60 Q15 75 10 95 Q35 90 45 75 Z" fill="#ea580c" opacity="0.85"/>
+            <ellipse cx="48" cy="24" rx="8" ry="22" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" transform="rotate(-12 48 24)"/>
+            <ellipse cx="48" cy="24" rx="4" ry="16" fill="#fed7aa" transform="rotate(-12 48 24)"/>
+            <ellipse cx="72" cy="24" rx="8" ry="22" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" transform="rotate(12 72 24)"/>
+            <ellipse cx="72" cy="24" rx="4" ry="16" fill="#fed7aa" transform="rotate(12 72 24)"/>
+            <ellipse cx="60" cy="85" rx="26" ry="22" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+            <path d="M42 66 Q60 76 78 66 L82 72 Q60 82 38 72 Z" fill="#f97316"/>
+            <ellipse cx="42" cy="106" rx="14" ry="7" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+            <ellipse cx="78" cy="106" rx="14" ry="7" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+            <circle cx="60" cy="54" r="22" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+            <circle cx="44" cy="58" r="5" fill="#f43f5e" opacity="0.35"/>
+            <circle cx="76" cy="58" r="5" fill="#f43f5e" opacity="0.35"/>
+            <ellipse cx="51" cy="48" rx="4.5" ry="6" fill="#1e293b"/>
+            <circle cx="52.5" cy="46" r="2" fill="#ffffff"/>
+            <ellipse cx="69" cy="48" rx="4.5" ry="6" fill="#1e293b"/>
+            <circle cx="70.5" cy="46" r="2" fill="#ffffff"/>
+            <polygon points="58,54 62,54 60,57" fill="#f43f5e"/>
+            <path d="M55 58 Q60 62 65 58" fill="none" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <!-- فقاعة الحوار الناطقة للكرتون -->
+        <div class="stage-speech-bubble" id="stageSpeechBubble">
+          <span class="bubble-speaker-avatar" id="bubbleAvatar">⏰</span>
+          <div class="bubble-text-content" id="bubbleText">
+            <strong>تكتك:</strong> مرحباً بكم في جزيرة الوقت الساحرة!
+          </div>
+        </div>
+      </div>
+
+      <!-- شريط التحكم بالفيلم والمهام والألبوم -->
+      <div class="theater-controls-panel">
+        
+        <!-- أزرار المشغل السينمائي -->
+        <div class="theater-media-buttons-row">
+          <button class="cinema-btn" id="theaterBtnPrev" title="الحلقة السابقة">⏮️ السابق</button>
+          <button class="cinema-btn primary-play" id="theaterBtnPlay"><span>▶️</span> <span>تشغيل الفيلم</span></button>
+          <button class="cinema-btn" id="theaterBtnReplay" title="إعادة تشغيل المشهد">🔄 إعادة</button>
+          <button class="cinema-btn" id="theaterBtnNext" title="الحلقة التالية">التالي ⏭️</button>
+        </div>
+
+        <!-- منطقة التحدي الكرتوني المرتبطة بالحلقة -->
+        <div class="theater-task-zone">
+          <div class="task-zone-header">
+            <span class="task-zone-title">🎯 مهمة هذه الحلقة:</span>
+          </div>
+          <p class="task-zone-prompt" id="taskZonePrompt">اسحب صديقنا سلحوف (العقرب الأزرق) ليرتاح عند الرقم 5!</p>
+          <div class="task-zone-actions">
+            <button class="task-zone-check-btn" id="btnTheaterTaskCheck"><span>✨</span> تحقق من إجابتي</button>
+            <button class="task-zone-help-btn" id="btnTheaterTaskHelp">🪄 مساعدة تكتك</button>
+          </div>
+          <div class="task-zone-result" id="taskZoneResult" style="display: none;"></div>
+        </div>
+
+        <!-- ألبوم ملصقات أبطال الوقت الكرتونية المجمعة -->
+        <div class="stickers-album-row" id="stickersAlbumRow"></div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- سكريبتات الحلقات الكرتونية ومحرك المسرح السينمائي -->
+  <script src="stories/01-turtle-hour.js"></script>
+  <script src="stories/02-bunny-minute.js"></script>
+  <script src="stories/03-clock-tower.js"></script>
+  <script src="stories/04-pizza-party.js"></script>
+  <script src="stories/05-magic-hops.js"></script>
+  <script src="stories/06-daily-routine.js"></script>
+  <script src="stories/story-engine.js"></script>
 
   <script src="app.js"></script>
 </body>
