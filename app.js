@@ -342,6 +342,13 @@ class KidsClockApp {
     } catch (e) {
       console.warn('Web Audio API not supported on this browser.');
     }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        try { window.speechSynthesis.getVoices(); } catch (e) {}
+      };
+      try { window.speechSynthesis.getVoices(); } catch (e) {}
+    }
   }
 
   ensureAudioUnlocked() {
@@ -509,37 +516,93 @@ class KidsClockApp {
     osc.stop(this.audioCtx.currentTime + 0.26);
   }
 
-  // النطق الصوتي بلغتين (العربية والإنجليزية) مع إشعار البداية والنهاية
+  // النطق الصوتي التفاعلي المقوى بلغتين (العربية والإنجليزية) مع إشعار البداية والنهاية
   speakText(text, onEndCallback = null) {
-    if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-
-    const cleanText = text.replace(/<[^>]*>/g, '');
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = this.currentLang === 'ar' ? 'ar-SA' : 'en-US';
-    utterance.rate = 0.9;
-    utterance.pitch = 1.15;
-
-    if (this.storyListenBtn) {
-      this.storyListenBtn.classList.add('speaking');
+    if (!text) {
+      if (typeof onEndCallback === 'function') onEndCallback();
+      return;
     }
 
-    utterance.onend = () => {
-      if (this.storyListenBtn) {
-        this.storyListenBtn.classList.remove('speaking');
-      }
-      if (typeof onEndCallback === 'function') {
-        onEndCallback();
+    const cleanText = text.replace(/<[^>]*>/g, '').trim();
+    if (!cleanText) {
+      if (typeof onEndCallback === 'function') onEndCallback();
+      return;
+    }
+
+    // تنشيط محرك الصوت وضمان فك الحظر
+    this.ensureAudioUnlocked();
+
+    // تشغيل نغمة كرتونية مبهجة مصاحبة للكلام
+    this.playTickSound();
+
+    let callbackFired = false;
+    const safeEnd = () => {
+      if (!callbackFired) {
+        callbackFired = true;
+        if (this.storyListenBtn) this.storyListenBtn.classList.remove('speaking');
+        const bubbleBtn = document.getElementById('bubbleSpeakBtn');
+        if (bubbleBtn) bubbleBtn.classList.remove('speaking');
+        if (typeof onEndCallback === 'function') onEndCallback();
       }
     };
 
-    utterance.onerror = () => {
-      if (this.storyListenBtn) {
-        this.storyListenBtn.classList.remove('speaking');
-      }
-    };
+    if (!('speechSynthesis' in window)) {
+      safeEnd();
+      return;
+    }
 
-    window.speechSynthesis.speak(utterance);
+    // مؤقت أمان في حال علق المتصفح أو لم يدعم لغة الصوت (Chrome GC Bug)
+    const estDuration = Math.max(3000, Math.min(15000, cleanText.length * 125));
+    const safetyTimer = setTimeout(safeEnd, estDuration + 1000);
+
+    // إلغاء أي نطق قديم مع تأخير خفيف لتفادي خطأ كروم
+    try {
+      window.speechSynthesis.cancel();
+    } catch (e) {}
+
+    setTimeout(() => {
+      try {
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = this.currentLang === 'ar' ? 'ar-SA' : 'en-US';
+        utterance.rate = 0.92;
+        utterance.pitch = 1.15;
+
+        // اختيار أفضل صوت عربي مثبت في النظام
+        const voices = window.speechSynthesis.getVoices();
+        if (voices && voices.length > 0) {
+          const targetLang = this.currentLang === 'ar' ? 'ar' : 'en';
+          const matchedVoice = voices.find(v => {
+            const l = (v.lang || '').toLowerCase();
+            const n = (v.name || '').toLowerCase();
+            return l.startsWith(targetLang) || (targetLang === 'ar' && (n.includes('arab') || n.includes('maged') || n.includes('tarik') || n.includes('laila') || n.includes('zeina') || n.includes('salma') || n.includes('naayf')));
+          });
+          if (matchedVoice) {
+            utterance.voice = matchedVoice;
+          }
+        }
+
+        if (this.storyListenBtn) this.storyListenBtn.classList.add('speaking');
+        const bubbleBtn = document.getElementById('bubbleSpeakBtn');
+        if (bubbleBtn) bubbleBtn.classList.add('speaking');
+
+        utterance.onend = () => {
+          clearTimeout(safetyTimer);
+          safeEnd();
+        };
+
+        utterance.onerror = (err) => {
+          console.warn('SpeechSynthesis event error:', err);
+          clearTimeout(safetyTimer);
+          safeEnd();
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } catch (err) {
+        console.warn('SpeechSynthesis invocation error:', err);
+        clearTimeout(safetyTimer);
+        safeEnd();
+      }
+    }, 45);
   }
 
   speakArabic(text) {

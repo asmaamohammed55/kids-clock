@@ -69,6 +69,7 @@ class CartoonStoryEngine {
     this.speechBubble = document.getElementById('stageSpeechBubble');
     this.bubbleAvatar = document.getElementById('bubbleAvatar');
     this.bubbleText = document.getElementById('bubbleText');
+    this.bubbleSpeakBtn = document.getElementById('bubbleSpeakBtn');
 
     // أزرار التحكم
     this.btnPlay = document.getElementById('theaterBtnPlay');
@@ -188,6 +189,40 @@ class CartoonStoryEngine {
         }
       });
     });
+
+    // زر الاستماع المباشر داخل فقاعة الحوار
+    if (this.bubbleSpeakBtn) {
+      this.bubbleSpeakBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.speakCurrentDialogue(true);
+      });
+    }
+
+    if (this.speechBubble) {
+      this.speechBubble.addEventListener('click', () => {
+        this.speakCurrentDialogue(false);
+      });
+    }
+
+    // تفاعل النقر المباشر على الشخصيات الكرتونية لتتكلم وتصدر أصواتها اللطيفة
+    if (this.actorTiktuk) {
+      this.actorTiktuk.addEventListener('click', () => {
+        this.playCartoonVoice('tiktuk');
+        if (window.app) window.app.speakText(this.currentLang === 'ar' ? 'أنا صديقكم تكتك المنبه! تيك توك، هيا نتعلم الساعة معاً!' : 'I am Tick-Tock the alarm! Let us learn the clock together!');
+      });
+    }
+    if (this.actorTurtle) {
+      this.actorTurtle.addEventListener('click', () => {
+        this.playCartoonVoice('turtle');
+        if (window.app) window.app.speakText(this.currentLang === 'ar' ? 'أنا سلحوف الهادئ، خطواتي القصيرة هي الساعات!' : 'I am Turtle, my short steps show the hours!');
+      });
+    }
+    if (this.actorBunny) {
+      this.actorBunny.addEventListener('click', () => {
+        this.playCartoonVoice('bunny');
+        if (window.app) window.app.speakText(this.currentLang === 'ar' ? 'أنا أرنوب النفاث السريع، أركض 60 دقيقة في كل دورة كاملة!' : 'I am speedy Bunny, running 60 minutes every full lap!');
+      });
+    }
 
     // زر تشغيل السينما من البانر في الصفحة الرئيسية
     const cinemaBanner = document.getElementById('openCartoonCinemaBanner');
@@ -364,6 +399,54 @@ class CartoonStoryEngine {
     this.renderStickerAlbum();
   }
 
+  // توليد نغمات أصوات كرتونية مبهجة باستخدام محرك الصوت Web Audio API
+  playCartoonVoice(speaker) {
+    if (!window.app || !window.app.audioCtx || !window.app.soundEnabled) return;
+    window.app.ensureAudioUnlocked();
+    const ctx = window.app.audioCtx;
+
+    const baseFreqs = {
+      tiktuk: [520, 640, 580, 720, 600],
+      turtle: [220, 260, 240, 280, 250],
+      bunny: [680, 840, 750, 920, 800]
+    };
+    const freqs = baseFreqs[speaker] || baseFreqs.tiktuk;
+
+    freqs.forEach((freq, idx) => {
+      const startTime = ctx.currentTime + (idx * 0.075);
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = speaker === 'turtle' ? 'sine' : (speaker === 'bunny' ? 'triangle' : 'triangle');
+      osc.frequency.setValueAtTime(freq, startTime);
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.15, startTime + 0.065);
+
+      gain.gain.setValueAtTime(0.18, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.07);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(startTime);
+      osc.stop(startTime + 0.075);
+    });
+  }
+
+  // نطق الحوار الحالي عند النقر على الفقاعة أو زر الاستماع
+  speakCurrentDialogue(forceSound = false) {
+    const ep = this.currentEpisode;
+    if (!ep || !ep.dialogues || !ep.dialogues[this.currentDiagIndex]) return;
+
+    const diag = ep.dialogues[this.currentDiagIndex];
+    const text = this.currentLang === 'ar' ? diag.textAr : diag.textEn;
+
+    if (window.app) {
+      window.app.ensureAudioUnlocked();
+      this.playCartoonVoice(diag.speaker);
+      window.app.speakText(text);
+    }
+  }
+
   displayDialogue(diagIdx) {
     const ep = this.currentEpisode;
     if (!ep || !ep.dialogues || !ep.dialogues[diagIdx]) return;
@@ -392,6 +475,9 @@ class CartoonStoryEngine {
     if (diag.clockTime) {
       this.setStageTime(diag.clockTime[0], diag.clockTime[1], true);
     }
+
+    // تشغيل نغمة صوت الشخصية الكرتونية فوراً
+    this.playCartoonVoice(diag.speaker);
 
     // نطق الحوار صوتياً
     if (window.app) {

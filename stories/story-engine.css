@@ -408,6 +408,41 @@
   flex: 1;
 }
 
+/* زر الاستماع الصوتي داخل فقاعة الحوار */
+.bubble-speech-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+  border: 2px solid #6ee7b7;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  box-shadow: 0 3px 8px rgba(16, 185, 129, 0.4);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
+}
+
+.bubble-speech-btn:hover {
+  transform: scale(1.06);
+  background: #10b981;
+}
+
+.bubble-speech-btn.speaking {
+  animation: pulseSpeechBtn 0.6s infinite alternate ease-in-out;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border-color: #fde047;
+}
+
+@keyframes pulseSpeechBtn {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); box-shadow: 0 0 12px rgba(245, 158, 11, 0.8); }
+}
+
 /* صندوق التحكم بالفيلم الكرتوني (Cinema Controls) */
 .theater-controls-panel {
   padding: 10px 14px;
