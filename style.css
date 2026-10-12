@@ -635,21 +635,58 @@ body[data-mode="lessons"] .mode-for-lessons {
   cursor: pointer;
 }
 
-/* وضع الدروس: شريط المحطات السريع */
-.lessons-top-card {
+/* وضع حكاية الأصدقاء الكرتونية (Story Adventure Mode) */
+.lessons-top-card,
+.story-top-card {
   width: 100%;
   background: #ffffff;
-  border: 2px solid #cbd5e1;
+  border: 2px solid #818cf8;
   border-radius: 18px;
-  padding: 6px 8px;
+  padding: 8px 10px;
   box-shadow: var(--shadow-sm);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
-.lessons-chips-row {
+.story-header-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+.story-tag {
+  font-size: 0.84rem;
+  font-weight: 900;
+  color: #4338ca;
+  background: #e0e7ff;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+.story-characters-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.char-pill {
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  color: #334155;
+  white-space: nowrap;
+}
+
+.lessons-chips-row,
+.story-chapters-row {
   display: flex;
   gap: 6px;
   width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2px;
 }
 .lesson-chip {
   flex-shrink: 0;
@@ -665,6 +702,7 @@ body[data-mode="lessons"] .mode-for-lessons {
   align-items: center;
   gap: 4px;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 .lesson-chip:hover {
   background: #eff6ff;
@@ -672,9 +710,9 @@ body[data-mode="lessons"] .mode-for-lessons {
 }
 .lesson-chip.active {
   background: #eff6ff;
-  border-color: #3b82f6;
-  color: #1d4ed8;
-  box-shadow: 0 2px 0 #2563eb;
+  border-color: #4f46e5;
+  color: #3730a3;
+  box-shadow: 0 2px 0 #4338ca;
 }
 
 /* ==========================================================================
@@ -1042,30 +1080,224 @@ body[data-mode="lessons"] .mode-for-lessons {
   color: #334155;
 }
 
-/* وضع الدروس: صندوق الشرح */
-.lessons-bottom-card {
+/* وضع حكاية الأصدقاء: منصة مشغل القصة السفلية */
+.lessons-bottom-card,
+.story-bottom-card {
   width: 100%;
   max-width: 440px;
   flex-direction: column;
 }
-.active-lesson-box {
+.active-lesson-box,
+.story-console-box {
   background: #ffffff;
-  border: 2.5px solid #93c5fd;
-  border-radius: 16px;
+  border: 2.5px solid #818cf8;
+  border-radius: 20px;
   padding: 12px 14px;
-  text-align: center;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: start;
+}
+.story-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 .active-lesson-title {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 900;
-  color: #1d4ed8;
-  margin-bottom: 4px;
+  color: #3730a3;
+  margin-bottom: 0;
+}
+.story-step-badge {
+  background: #ede9fe;
+  color: #6d28d9;
+  border: 1.5px solid #c4b5fd;
+  font-size: 0.8rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+.story-dialogue-bubble {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 10px 12px;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+}
+.story-speaker-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  margin-bottom: 6px;
 }
 .active-lesson-desc {
   font-size: 0.88rem;
-  color: #475569;
+  color: #1e293b;
   line-height: 1.45;
+}
+
+/* شريط أزرار التحكم بالحكاية */
+.story-actions-bar {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+.story-listen-btn {
+  background: #eff6ff;
+  border-color: #60a5fa;
+  color: #1d4ed8;
+  font-weight: 800;
+  flex: 1;
+  justify-content: center;
+}
+.story-listen-btn:hover {
+  background: #dbeafe;
+}
+.story-listen-btn.speaking {
+  background: #fef08a;
+  border-color: #eab308;
+  color: #854d0e;
+  animation: pulseSpeech 1s infinite alternate;
+}
+@keyframes pulseSpeech {
+  from { transform: scale(1); }
+  to { transform: scale(1.03); }
+}
+.story-animate-btn {
+  background: #fdf2f8;
+  border-color: #f472b6;
+  color: #be185d;
+  font-weight: 800;
+  flex: 1;
+  justify-content: center;
+}
+.story-animate-btn:hover {
+  background: #fce7f3;
+}
+
+/* بطاقة المهمة التفاعلية للطفل */
+.story-task-card {
+  background: #f0fdf4;
+  border: 2px dashed #86efac;
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.task-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.task-badge {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #15803d;
+}
+.task-status-icon {
+  font-size: 1.1rem;
+}
+.task-instruction {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #166534;
+  line-height: 1.35;
+}
+.task-buttons-row {
+  display: flex;
+  gap: 6px;
+}
+.task-check-btn {
+  background: #22c55e;
+  color: #ffffff;
+  border-color: #16a34a;
+  font-weight: 900;
+  font-size: 0.82rem;
+  box-shadow: 0 2px 0 #15803d;
+  flex: 1;
+  justify-content: center;
+}
+.task-check-btn:hover {
+  background: #16a34a;
+}
+.task-help-btn {
+  background: #ffffff;
+  border-color: #86efac;
+  color: #166534;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+}
+.task-feedback {
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-align: center;
+}
+.task-feedback.success {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1.5px solid #86efac;
+}
+.task-feedback.retry {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1.5px solid #fde047;
+}
+
+/* أزرار التنقل بين الفصول */
+.story-navigation-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+}
+.story-nav-btn {
+  flex: 1;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.88rem;
+  padding: 8px 12px;
+}
+.story-nav-btn.primary {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #ffffff;
+  border-color: #4338ca;
+  box-shadow: 0 3px 0 #3730a3;
+}
+.story-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* وميض وتوهج كرتوني للعقارب أثناء القصة */
+.pulse-turtle {
+  filter: drop-shadow(0 0 16px #3b82f6) drop-shadow(0 0 8px #60a5fa);
+  animation: pulseTurtleHand 1s infinite alternate ease-in-out;
+}
+@keyframes pulseTurtleHand {
+  from { filter: drop-shadow(0 0 6px #3b82f6); }
+  to { filter: drop-shadow(0 0 20px #2563eb); }
+}
+.pulse-bunny {
+  filter: drop-shadow(0 0 16px #f97316) drop-shadow(0 0 8px #fb923c);
+  animation: pulseBunnyHand 0.75s infinite alternate ease-in-out;
+}
+@keyframes pulseBunnyHand {
+  from { filter: drop-shadow(0 0 6px #f97316); }
+  to { filter: drop-shadow(0 0 22px #ea580c); }
 }
 
 /* --------------------------------------------------------------------------

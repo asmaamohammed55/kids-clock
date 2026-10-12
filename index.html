@@ -57,15 +57,15 @@
       </div>
     </header>
 
-    <!-- شريط اختيار الأنماط (استكشاف / دروس / تحديات) -->
+    <!-- شريط اختيار الأنماط (استكشاف / حكاية كرتونية / تحديات) -->
     <nav class="modes-nav">
       <button class="mode-tab active" data-mode="explore" id="tabExplore">
         <span class="tab-icon">🧭</span>
         <span data-i18n="tabExplore">العب واستكشف</span>
       </button>
       <button class="mode-tab" data-mode="lessons" id="tabLessons">
-        <span class="tab-icon">🎓</span>
-        <span data-i18n="tabLessons">المحطات التعليمية</span>
+        <span class="tab-icon">📖</span>
+        <span data-i18n="tabLessons">حكاية تكتك وسلحوف</span>
       </button>
       <button class="mode-tab" data-mode="quiz" id="tabQuiz">
         <span class="tab-icon">🏆</span>
@@ -121,14 +121,22 @@
           </div>
         </div>
 
-        <!-- في وضع الدروس: شريط المحطات التعليمية السريعة -->
-        <div id="lessonsHeaderCard" class="mode-element mode-for-lessons lessons-top-card">
-          <div class="lessons-chips-row">
-            <button class="lesson-card lesson-chip active" data-lesson="1"><span class="chip-icon">🐢</span><span data-i18n="lessonChip1">1. الساعات</span></button>
-            <button class="lesson-card lesson-chip" data-lesson="2"><span class="chip-icon">🐇</span><span data-i18n="lessonChip2">2. الدقائق</span></button>
-            <button class="lesson-card lesson-chip" data-lesson="3"><span class="chip-icon">🔔</span><span data-i18n="lessonChip3">3. تماماً</span></button>
-            <button class="lesson-card lesson-chip" data-lesson="4"><span class="chip-icon">🍕</span><span data-i18n="lessonChip4">4. النصف والربع</span></button>
-            <button class="lesson-card lesson-chip" data-lesson="5"><span class="chip-icon">🦘</span><span data-i18n="lessonChip5">5. الخمسات</span></button>
+        <!-- في وضع حكاية الأصدقاء الكرتونية: فصول المغامرة المشوقة -->
+        <div id="lessonsHeaderCard" class="mode-element mode-for-lessons lessons-top-card story-top-card">
+          <div class="story-header-title-row">
+            <span class="story-tag">📖 <span data-i18n="storyBadge">حكاية أصدقاء الوقت</span></span>
+            <div class="story-characters-icons" title="أبطال القصة: تكتك المنبه ⏰، سلحوف عقرب الساعات 🐢، وأرنوب عقرب الدقائق 🐇!">
+              <span class="char-pill">⏰ تكتُك</span>
+              <span class="char-pill">🐢 سلحوف</span>
+              <span class="char-pill">🐇 أرنوب</span>
+            </div>
+          </div>
+          <div class="lessons-chips-row story-chapters-row">
+            <button class="lesson-card lesson-chip active" data-lesson="1"><span class="chip-icon">🐢</span><span data-i18n="lessonChip1">1. سلحوف الهادئ</span></button>
+            <button class="lesson-card lesson-chip" data-lesson="2"><span class="chip-icon">🐇</span><span data-i18n="lessonChip2">2. سباق أرنوب</span></button>
+            <button class="lesson-card lesson-chip" data-lesson="3"><span class="chip-icon">🔔</span><span data-i18n="lessonChip3">3. قمة الـ 12</span></button>
+            <button class="lesson-card lesson-chip" data-lesson="4"><span class="chip-icon">🍕</span><span data-i18n="lessonChip4">4. بيتزا النصف والربع</span></button>
+            <button class="lesson-card lesson-chip" data-lesson="5"><span class="chip-icon">🦘</span><span data-i18n="lessonChip5">5. قفزات الخمسات</span></button>
           </div>
         </div>
 
@@ -197,18 +205,18 @@
             <!-- أرقام الساعات الكبيرة الواضحة (1 إلى 12) -->
             <g id="hourNumbers" class="hour-numbers-group"></g>
 
-            <!-- عقرب الساعات (القصير - الأزرق) -->
+            <!-- عقرب الساعات (القصير - الأزرق / سلحوف 🐢) -->
             <g id="hourHandGroup" class="hand-group hour-hand-group">
               <rect x="189" y="85" width="22" height="135" rx="11" fill="url(#hourHandGrad)" filter="url(#softShadow)" />
               <path d="M200 65 L215 90 L185 90 Z" fill="#1d4ed8" />
-              <text id="hourHandText" x="200" y="145" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">ساعة</text>
+              <text id="hourHandText" x="200" y="145" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">ساعة 🐢</text>
             </g>
 
-            <!-- عقرب الدقائق (الطويل - البرتقالي) -->
+            <!-- عقرب الدقائق (الطويل - البرتقالي / أرنوب 🐇) -->
             <g id="minuteHandGroup" class="hand-group minute-hand-group">
               <rect x="192" y="45" width="16" height="175" rx="8" fill="url(#minuteHandGrad)" filter="url(#softShadow)" />
               <path d="M200 25 L213 50 L187 50 Z" fill="#ea580c" />
-              <text id="minuteHandText" x="200" y="105" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">دقيقة</text>
+              <text id="minuteHandText" x="200" y="105" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">دقيقة 🐇</text>
             </g>
 
             <!-- مركز الساعة (المسمار الأوسط) -->
@@ -282,11 +290,11 @@
 
           <div class="tips-grid">
             <div class="tip-card">
-              <span class="tip-badge blue" data-i18n="tip1Badge">العقرب الأزرق</span>
+              <span class="tip-badge blue" data-i18n="tip1Badge">العقرب الأزرق (سلحوف)</span>
               <p data-i18n="tip1Text">هو <strong>عقرب الساعات</strong>: قصير وبطيء، يخبرك في أي ساعة نحن الآن.</p>
             </div>
             <div class="tip-card">
-              <span class="tip-badge orange" data-i18n="tip2Badge">العقرب البرتقالي</span>
+              <span class="tip-badge orange" data-i18n="tip2Badge">العقرب البرتقالي (أرنوب)</span>
               <p data-i18n="tip2Text">هو <strong>عقرب الدقائق</strong>: طويل وسريع، يخبرك كم دقيقة مرت.</p>
             </div>
             <div class="tip-card">
@@ -300,11 +308,61 @@
           </div>
         </div>
 
-        <!-- في وضع الدروس: شرح المحطة الحالية -->
-        <div id="lessonsBottomCard" class="mode-element mode-for-lessons lessons-bottom-card">
-          <div class="active-lesson-box" id="activeLessonBox">
-            <h3 class="active-lesson-title" id="activeLessonTitle">المحطة 1: عقرب الساعات (الأزرق القصير)</h3>
-            <p class="active-lesson-desc" id="activeLessonDesc">تعرف على العقرب الأزرق القصير والبطيء كالسّلحفاة الذي يدور بهدوء ويخبرنا بالساعة الحالية.</p>
+        <!-- في وضع حكاية الأصدقاء: منصة مشغل القصة الكرتونية الناطقة -->
+        <div id="lessonsBottomCard" class="mode-element mode-for-lessons lessons-bottom-card story-bottom-card">
+          <div class="active-lesson-box story-console-box" id="activeLessonBox">
+            <div class="story-title-row">
+              <h3 class="active-lesson-title" id="activeLessonTitle">الفصل 1: لقاء سلحوف الهادئ (عقرب الساعات)</h3>
+              <span class="story-step-badge" id="storyStepBadge">1 / 5</span>
+            </div>
+            
+            <!-- نص القصة الكرتونية الناطقة -->
+            <div class="story-dialogue-bubble" id="storyDialogueBubble">
+              <div class="story-speaker-badge" id="storySpeakerBadge">⏰ تكتُك يحكي:</div>
+              <p class="active-lesson-desc" id="activeLessonDesc">
+                يا هلا يا أبطال! أنا صديقكم تكتُك.. في يوم مشمس، قابلت صديقي «سلحوف» السلحفاة الهادئة. سلحوف يمشي ببطء شديد وخطواته قصيرة ومحسوبة، تماماً مثل <strong>العقرب الأزرق القصير</strong>!
+              </p>
+            </div>
+
+            <!-- شريط أزرار التحكم في الحكاية -->
+            <div class="story-actions-bar">
+              <button id="storyListenBtn" class="pill-btn story-listen-btn">
+                <span>🔊</span> <span data-i18n="storyListenBtn">استمع للحكاية</span>
+              </button>
+              <button id="storyAnimateBtn" class="pill-btn story-animate-btn">
+                <span>🎬</span> <span data-i18n="storyAnimateBtn">شاهد الحركة</span>
+              </button>
+            </div>
+
+            <!-- بطاقة المهمة التفاعلية للطفل بعد سماع الفصل -->
+            <div class="story-task-card" id="storyTaskCard">
+              <div class="task-header-row">
+                <span class="task-badge">🎯 <span data-i18n="storyTaskBadge">مهمتك يا بطل:</span></span>
+                <span class="task-status-icon" id="taskStatusIcon">⏳</span>
+              </div>
+              <p class="task-instruction" id="taskInstruction">
+                اسحب صديقنا سلحوف (العقرب الأزرق) ليرتاح عند الرقم 5!
+              </p>
+              <div class="task-buttons-row">
+                <button id="btnCheckStoryTask" class="pill-btn task-check-btn">
+                  <span>✨</span> <span data-i18n="storyTaskCheckBtn">تحقّق من مهمتي</span>
+                </button>
+                <button id="btnHelpStoryTask" class="pill-btn task-help-btn" title="دع تكتك يحلها للمساعدة">
+                  <span>🪄</span> <span data-i18n="storyTaskHelpBtn">مساعدة تكتك</span>
+                </button>
+              </div>
+              <div class="task-feedback" id="storyTaskFeedback" style="display: none;"></div>
+            </div>
+
+            <!-- أزرار التنقل بين الفصول -->
+            <div class="story-navigation-row">
+              <button id="btnPrevStoryChapter" class="pill-btn story-nav-btn" disabled>
+                <span data-i18n="prevChapterBtn">⬅️ السابق</span>
+              </button>
+              <button id="btnNextStoryChapter" class="pill-btn story-nav-btn primary">
+                <span data-i18n="nextChapterBtn">التالي ➡️</span>
+              </button>
+            </div>
           </div>
         </div>
 
