@@ -542,29 +542,56 @@
 
         <div class="stage-ground"></div>
 
-        <!-- ساعة المسرح التفاعلية المزامنة -->
+        <!-- ساعة المسرح التفاعلية المزامنة بكامل الأرقام الـ 12 -->
         <div id="stageClockActor" class="stage-clock-actor">
-          <svg viewBox="0 0 200 200">
-            <circle cx="100" cy="100" r="92" fill="#ffffff" stroke="#facc15" stroke-width="8" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.15))"/>
-            <circle cx="100" cy="100" r="82" fill="#fefce8" stroke="#fef08a" stroke-width="2"/>
-            <text x="100" y="32" text-anchor="middle" font-size="16" font-weight="900" fill="#1e1b4b">12</text>
-            <text x="170" y="106" text-anchor="middle" font-size="16" font-weight="900" fill="#1e1b4b">3</text>
-            <text x="100" y="178" text-anchor="middle" font-size="16" font-weight="900" fill="#1e1b4b">6</text>
-            <text x="30" y="106" text-anchor="middle" font-size="16" font-weight="900" fill="#1e1b4b">9</text>
-            <!-- عقرب الساعات القصير (الأزرق) -->
-            <g id="stageHourHand" style="transform-origin: 100px 100px; transition: transform 0.4s ease;">
-              <rect x="94" y="45" width="12" height="60" rx="6" fill="#2563eb"/>
-              <path d="M100 35 L108 50 L92 50 Z" fill="#1d4ed8"/>
+          <svg viewBox="0 0 200 200" id="stageClockSvg">
+            <defs>
+              <filter id="clockDropShadow" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.25"/>
+              </filter>
+            </defs>
+            <!-- الإطار الدائري الذهبي الناصع -->
+            <circle cx="100" cy="100" r="92" fill="#ffffff" stroke="#facc15" stroke-width="8" filter="url(#clockDropShadow)"/>
+            <circle cx="100" cy="100" r="82" fill="#fffbeb" stroke="#fef08a" stroke-width="2"/>
+            
+            <!-- أرقام الساعة الـ 12 الكاملة بتوزيع هندسي دقيق مع أزرار لمس -->
+            <g id="stageClockNumbers" class="stage-clock-numbers-group">
+              <g class="stage-num-btn" data-hour="12" transform="translate(100, 36)"><circle r="13" fill="transparent"/><text text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="900" fill="#1e1b4b">12</text></g>
+              <g class="stage-num-btn" data-hour="1" transform="translate(131, 46)"><circle r="13" fill="transparent"/><text text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="900" fill="#1e1b4b">1</text></g>
+              <g class="stage-num-btn" data-hour="2" transform="translate(154, 69)"><circle r="13" fill="transparent"/><text text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="900" fill="#1e1b4b">2</text></g>
+              <g class="stage-num-btn" data-hour="3" transform="translate(162, 100)"><circle r="13" fill="transparent"/><text text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="900" fill="#1e1b4b">3</text></g>
+              <g class="stage-num-btn" data-hour="4" transform="translate(154, 131)"><circle r="13" fill="transparent"/><text text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="900" fill="#1e1b4b">4</text></g>
+              <g class="stage-num-btn" data-hour="5" transform="translate(131, 154)"><circle r="13" fill="transparent"/><text text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="900" fill="#1e1b4b">5</text></g>
+              <g class="stage-num-btn" data-hour="6" transform="translate(100, 164)"><circle r="13" fill="transparent"/><text text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="900" fill="#1e1b4b">6</text></g>
+              <g class="stage-num-btn" data-hour="7" transform="translate(69, 154)"><circle r="13" fill="transparent"/><text text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="900" fill="#1e1b4b">7</text></g>
+              <g class="stage-num-btn" data-hour="8" transform="translate(46, 131)"><circle r="13" fill="transparent"/><text text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="900" fill="#1e1b4b">8</text></g>
+              <g class="stage-num-btn" data-hour="9" transform="translate(38, 100)"><circle r="13" fill="transparent"/><text text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="900" fill="#1e1b4b">9</text></g>
+              <g class="stage-num-btn" data-hour="10" transform="translate(46, 69)"><circle r="13" fill="transparent"/><text text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="900" fill="#1e1b4b">10</text></g>
+              <g class="stage-num-btn" data-hour="11" transform="translate(69, 46)"><circle r="13" fill="transparent"/><text text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="900" fill="#1e1b4b">11</text></g>
             </g>
-            <!-- عقرب الدقائق الطويل (البرتقالي) -->
-            <g id="stageMinuteHand" style="transform-origin: 100px 100px; transition: transform 0.4s ease;">
-              <rect x="96" y="25" width="8" height="80" rx="4" fill="#f97316"/>
-              <path d="M100 15 L106 30 L94 30 Z" fill="#ea580c"/>
+
+            <!-- عقرب الساعات القصير (الأزرق - سلحوف 🐢) -->
+            <g id="stageHourHand" style="transform-origin: 100px 100px; cursor: grab;" class="stage-hand stage-hour-hand">
+              <rect x="93" y="46" width="14" height="58" rx="7" fill="#2563eb"/>
+              <path d="M100 34 L110 50 L90 50 Z" fill="#1d4ed8"/>
+              <circle cx="100" cy="65" r="4" fill="#93c5fd"/>
             </g>
-            <circle cx="100" cy="100" r="8" fill="#1e1b4b"/>
-            <circle cx="100" cy="100" r="4" fill="#facc15"/>
+
+            <!-- عقرب الدقائق الطويل (البرتقالي - أرنوب 🐇) -->
+            <g id="stageMinuteHand" style="transform-origin: 100px 100px; cursor: grab;" class="stage-hand stage-minute-hand">
+              <rect x="95" y="24" width="10" height="82" rx="5" fill="#f97316"/>
+              <path d="M100 12 L108 28 L92 28 Z" fill="#ea580c"/>
+              <circle cx="100" cy="48" r="3" fill="#fed7aa"/>
+            </g>
+
+            <!-- مسمار المركز الذهبي -->
+            <circle cx="100" cy="100" r="9" fill="#1e1b4b"/>
+            <circle cx="100" cy="100" r="5" fill="#facc15"/>
           </svg>
         </div>
+
+        <!-- شارة الوقت الرقمي المعروض في المسرح -->
+        <div id="stageDigitalTime" class="stage-digital-badge">03:00</div>
 
         <!-- تكتك المنبه الكرتوني المعلم ⏰ -->
         <div id="actorTiktuk" class="actor-character actor-tiktuk idle">
@@ -645,7 +672,7 @@
         <!-- أزرار المشغل السينمائي -->
         <div class="theater-media-buttons-row">
           <button class="cinema-btn" id="theaterBtnPrev" title="الحلقة السابقة">⏮️ السابق</button>
-          <button class="cinema-btn primary-play" id="theaterBtnPlay"><span>▶️</span> <span>تشغيل الفيلم</span></button>
+          <button class="cinema-btn primary-play" id="theaterBtnPlay"><span>▶️</span> <span id="theaterPlayBtnText">تشغيل الفيلم</span></button>
           <button class="cinema-btn" id="theaterBtnReplay" title="إعادة تشغيل المشهد">🔄 إعادة</button>
           <button class="cinema-btn" id="theaterBtnNext" title="الحلقة التالية">التالي ⏭️</button>
         </div>
@@ -656,6 +683,15 @@
             <span class="task-zone-title">🎯 مهمة هذه الحلقة:</span>
           </div>
           <p class="task-zone-prompt" id="taskZonePrompt">اسحب صديقنا سلحوف (العقرب الأزرق) ليرتاح عند الرقم 5!</p>
+          
+          <!-- أزرار الضبط السريع باللمس للساعة -->
+          <div class="stage-quick-adjust-row">
+            <button type="button" class="stage-adjust-btn" id="btnStageHourDown">➖ ساعة</button>
+            <button type="button" class="stage-adjust-btn" id="btnStageHourUp">➕ ساعة</button>
+            <button type="button" class="stage-adjust-btn" id="btnStageMinDown">➖ 15 د</button>
+            <button type="button" class="stage-adjust-btn" id="btnStageMinUp">➕ 15 د</button>
+          </div>
+
           <div class="task-zone-actions">
             <button class="task-zone-check-btn" id="btnTheaterTaskCheck"><span>✨</span> تحقق من إجابتي</button>
             <button class="task-zone-help-btn" id="btnTheaterTaskHelp">🪄 مساعدة تكتك</button>

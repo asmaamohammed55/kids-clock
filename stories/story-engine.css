@@ -13,7 +13,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 8px;
+  overflow-y: auto;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -28,14 +29,15 @@
 .theater-stage-container {
   width: 100%;
   max-width: 680px;
-  max-height: 94vh;
+  max-height: 96vh;
   background: linear-gradient(180deg, #1e1b4b 0%, #312e81 60%, #1e1b4b 100%);
   border: 4px solid #facc15;
   border-radius: 28px;
   box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.6), 0 0 30px rgba(250, 204, 21, 0.35);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   position: relative;
   transform: scale(0.92);
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -51,7 +53,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 16px;
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(15, 23, 42, 0.7);
   border-bottom: 2px solid rgba(250, 204, 21, 0.3);
   color: #f8fafc;
 }
@@ -107,62 +109,60 @@
   display: flex;
   gap: 8px;
   padding: 8px 12px;
-  background: rgba(30, 27, 75, 0.7);
+  background: rgba(15, 23, 42, 0.85);
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid rgba(250, 204, 21, 0.25);
+  align-items: center;
+  min-height: 48px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .episodes-carousel-bar::-webkit-scrollbar {
-  height: 4px;
-}
-.episodes-carousel-bar::-webkit-scrollbar-thumb {
-  background: #facc15;
-  border-radius: 4px;
+  display: none;
 }
 
 .episode-pill-tab {
   flex-shrink: 0;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
   background: rgba(255, 255, 255, 0.12);
   border: 1.5px solid rgba(255, 255, 255, 0.25);
-  color: #e2e8f0;
-  padding: 6px 12px;
+  color: #f1f5f9;
+  padding: 6px 14px;
   border-radius: 9999px;
-  font-size: 0.8rem;
+  font-size: 0.84rem;
   font-weight: 800;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.2s ease;
   white-space: nowrap;
+  line-height: 1.2;
 }
 
 .episode-pill-tab:hover {
   background: rgba(255, 255, 255, 0.22);
-  transform: translateY(-1px);
 }
 
 .episode-pill-tab.active {
   background: linear-gradient(135deg, #f59e0b, #facc15);
   border-color: #ffffff;
   color: #1e1b4b;
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
-  transform: scale(1.04);
+  font-weight: 900;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.5);
 }
 
 /* المسرح الكرتوني المشهدي (The Visual Cinema Stage) */
 .theater-stage-canvas-area {
   position: relative;
   width: 100%;
-  height: 260px;
-  min-height: 220px;
-  background: linear-gradient(180deg, #38bdf8 0%, #7dd3fc 65%, #4ade80 65%, #22c55e 100%);
+  height: 300px;
+  min-height: 290px;
+  background: linear-gradient(180deg, #38bdf8 0%, #7dd3fc 62%, #4ade80 62%, #22c55e 100%);
   border-bottom: 3px solid #facc15;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 /* عناصر الديكور الكرتوني في المسرح */
@@ -175,12 +175,12 @@
 .stage-sun {
   position: absolute;
   top: 15px;
-  left: 30px;
-  width: 50px;
-  height: 50px;
+  left: 25px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: radial-gradient(circle, #fef08a, #facc15);
-  box-shadow: 0 0 25px rgba(250, 204, 21, 0.8);
+  box-shadow: 0 0 25px rgba(250, 204, 21, 0.85);
   animation: sunGlow 3s infinite alternate ease-in-out;
 }
 
@@ -197,23 +197,23 @@
 }
 .stage-cloud-1 {
   width: 90px;
-  height: 28px;
-  top: 25px;
+  height: 26px;
+  top: 20px;
   right: 15%;
-  animation: floatCloud 22s linear infinite;
+  animation: floatCloud 24s linear infinite;
 }
 .stage-cloud-2 {
   width: 70px;
-  height: 22px;
-  top: 55px;
+  height: 20px;
+  top: 50px;
   right: 65%;
-  opacity: 0.8;
-  animation: floatCloud 28s linear infinite 5s;
+  opacity: 0.85;
+  animation: floatCloud 30s linear infinite 4s;
 }
 
 @keyframes floatCloud {
   from { transform: translateX(120px); }
-  to { transform: translateX(-400px); }
+  to { transform: translateX(-420px); }
 }
 
 .stage-ground {
@@ -221,44 +221,96 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 35%;
+  height: 38%;
   background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
   border-top: 3px solid #86efac;
 }
 
-/* شاشة الساعة المصغرة التفاعلية داخل المشهد */
+/* ساعة المسرح التفاعلية المسحوبة */
 .stage-clock-actor {
   position: absolute;
-  width: 140px;
-  height: 140px;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 165px;
+  height: 165px;
   border-radius: 50%;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
-  z-index: 5;
-  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 10;
+  transition: transform 0.3s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
 }
 
 .stage-clock-actor svg {
   width: 100%;
   height: 100%;
+  overflow: visible;
+}
+
+/* شارة الوقت الرقمي للمسرح */
+.stage-digital-badge {
+  position: absolute;
+  top: 182px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e1b4b;
+  color: #facc15;
+  border: 2px solid #facc15;
+  padding: 2px 14px;
+  border-radius: 9999px;
+  font-weight: 900;
+  font-size: 0.88rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 12;
+  letter-spacing: 1px;
+}
+
+/* تفاعل أرقام الساعة باللمس */
+.stage-num-btn {
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.stage-num-btn:hover {
+  filter: drop-shadow(0 0 4px #f59e0b);
+}
+
+/* أيدي وعقارب الساعة التفاعلية */
+.stage-hand {
+  cursor: grab;
+  transition: transform 0.25s ease-out;
+}
+.stage-hand:active {
+  cursor: grabbing;
 }
 
 /* شخصيات الرسوم المتحركة في المشهد الكرتوني */
 .actor-character {
   position: absolute;
-  z-index: 10;
+  z-index: 8;
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: all 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.25));
+}
+
+/* إخفاء الشخصيات غير المشاركة في المشهد تماماً */
+.actor-character.hidden {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: scale(0.4) translateY(30px) !important;
 }
 
 /* سلحوف السلحفاة الكرتونية 🐢 */
 .actor-turtle {
-  bottom: 20px;
-  right: 25px;
-  width: 80px;
-  height: 75px;
+  bottom: 22px;
+  right: 18px;
+  width: 78px;
+  height: 72px;
 }
 .actor-turtle svg {
   width: 100%;
@@ -275,9 +327,9 @@
 /* أرنوب الأرنب الكرتوني النفاث 🐇 */
 .actor-bunny {
   bottom: 22px;
-  left: 25px;
-  width: 80px;
-  height: 85px;
+  left: 18px;
+  width: 78px;
+  height: 82px;
 }
 .actor-bunny svg {
   width: 100%;
@@ -293,10 +345,10 @@
 
 /* تكتك المنبه الكرتوني المعلم ⏰ */
 .actor-tiktuk {
-  top: 15px;
-  right: 20px;
-  width: 65px;
-  height: 65px;
+  top: 14px;
+  right: 18px;
+  width: 62px;
+  height: 62px;
 }
 .actor-tiktuk svg {
   width: 100%;
@@ -313,14 +365,15 @@
 /* فقاعة الحوار الكرتونية التفاعلية */
 .stage-speech-bubble {
   position: absolute;
-  bottom: 12px;
+  bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
   background: #ffffff;
   border: 3px solid #3b82f6;
-  border-radius: 20px;
-  padding: 8px 16px;
-  max-width: 88%;
+  border-radius: 18px;
+  padding: 8px 14px;
+  width: calc(100% - 24px);
+  max-width: 580px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
   z-index: 15;
   display: flex;
@@ -336,39 +389,49 @@
 .bubble-speaker-avatar {
   font-size: 1.8rem;
   flex-shrink: 0;
+  background: #eff6ff;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid #93c5fd;
 }
 
 .bubble-text-content {
   font-size: 0.88rem;
   font-weight: 800;
   color: #1e293b;
-  line-height: 1.4;
+  line-height: 1.45;
   text-align: start;
+  flex: 1;
 }
 
 /* صندوق التحكم بالفيلم الكرتوني (Cinema Controls) */
 .theater-controls-panel {
-  padding: 12px 16px;
+  padding: 10px 14px;
   background: #1e1b4b;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .theater-media-buttons-row {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .cinema-btn {
   background: rgba(255, 255, 255, 0.12);
   border: 2px solid rgba(255, 255, 255, 0.25);
   color: #ffffff;
-  padding: 8px 14px;
+  padding: 7px 14px;
   border-radius: 9999px;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -386,8 +449,8 @@
 .cinema-btn.primary-play {
   background: linear-gradient(135deg, #10b981, #059669);
   border-color: #34d399;
-  font-size: 1rem;
-  padding: 9px 18px;
+  font-size: 0.95rem;
+  padding: 8px 18px;
   box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
 }
 
@@ -395,17 +458,12 @@
   background: #10b981;
 }
 
-.cinema-btn.highlight {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  border-color: #fde047;
-}
-
 /* بطاقة المهمة التفاعلية بعد الحلقة الكرتونية */
 .theater-task-zone {
   background: rgba(255, 255, 255, 0.08);
   border: 2px dashed #facc15;
   border-radius: 18px;
-  padding: 10px 14px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -418,7 +476,7 @@
 }
 
 .task-zone-title {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 900;
   color: #facc15;
   display: flex;
@@ -427,10 +485,37 @@
 }
 
 .task-zone-prompt {
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   color: #f8fafc;
-  font-weight: 700;
-  line-height: 1.35;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+/* أزرار الضبط السريع للساعة في المسرح */
+.stage-quick-adjust-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 2px 0;
+}
+
+.stage-adjust-btn {
+  background: rgba(255, 255, 255, 0.14);
+  color: #f8fafc;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.stage-adjust-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
 }
 
 .task-zone-actions {
@@ -446,47 +531,56 @@
   padding: 8px;
   border-radius: 12px;
   font-weight: 900;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   cursor: pointer;
   box-shadow: 0 3px 0 #1d4ed8;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  transition: all 0.15s ease;
 }
 
 .task-zone-check-btn:hover {
   filter: brightness(1.1);
+  transform: translateY(-1px);
 }
 
 .task-zone-help-btn {
   background: rgba(255, 255, 255, 0.15);
   color: #ffffff;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
   padding: 8px 12px;
   border-radius: 12px;
   font-weight: 800;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.task-zone-help-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 /* رسالة النتيجة للمهمة */
 .task-zone-result {
-  padding: 6px 10px;
-  border-radius: 10px;
-  font-size: 0.84rem;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 0.86rem;
   font-weight: 800;
   text-align: center;
+  line-height: 1.4;
 }
+
 .task-zone-result.success {
   background: #dcfce7;
   color: #166534;
-  border: 1.5px solid #86efac;
+  border: 2px solid #86efac;
 }
 .task-zone-result.retry {
   background: #fef3c7;
   color: #854d0e;
-  border: 1.5px solid #fde047;
+  border: 2px solid #fde047;
 }
 
 /* شريط ألبوم ملصقات أبطال الوقت (Collectible Stickers) */
@@ -494,41 +588,43 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 6px 10px;
-  background: rgba(0, 0, 0, 0.25);
-  border-radius: 14px;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1.5px solid rgba(250, 204, 21, 0.25);
+  border-radius: 16px;
+  margin-top: 2px;
 }
 
 .sticker-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  opacity: 0.35;
+  gap: 3px;
+  opacity: 0.45;
   filter: grayscale(1);
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .sticker-item.unlocked {
   opacity: 1;
-  filter: grayscale(0);
-  transform: scale(1.1);
+  filter: grayscale(0) drop-shadow(0 0 8px rgba(250, 204, 21, 0.8));
+  transform: scale(1.08);
   animation: stickerBadgeBounce 1s infinite alternate ease-in-out;
 }
 
 @keyframes stickerBadgeBounce {
-  from { transform: scale(1.05); }
-  to { transform: scale(1.15) rotate(4deg); }
+  from { transform: scale(1.04); }
+  to { transform: scale(1.12) rotate(3deg); }
 }
 
 .sticker-icon {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
 }
 
 .sticker-label {
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   font-weight: 800;
-  color: #cbd5e1;
+  color: #f1f5f9;
 }
 
 /* بطاقة إعلان المسرح في الصفحة الرئيسية */
@@ -577,7 +673,7 @@
 
 .banner-sub {
   color: #fde047;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 800;
 }
 

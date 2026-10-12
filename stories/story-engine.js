@@ -1,7 +1,7 @@
 /**
  * ==============================================================================
  * محرك مسرح سينما الحكايات الكرتونية - Cartoon Cinema Story Engine
- * تقنيات: SVG Cartoon Actors, Dynamic Playback, Voice Narration & Audio FX
+ * تقنيات: SVG Cartoon Actors, Dynamic Playback, Drag & Drop Clock, Voice Narration & Audio FX
  * ==============================================================================
  */
 
@@ -21,12 +21,21 @@ class CartoonStoryEngine {
     this.isPlaying = false;
     this.timer = null;
 
+    // حالة وقت ساعة المسرح
+    this.stageHours = 3;
+    this.stageMinutes = 0;
+
+    // حالة السحب لعقارب ساعة المسرح
+    this.isDragging = false;
+    this.draggedHand = null; // 'hour' | 'minute'
+
     // الملصقات المحفوظة المجمعة من إكمال التحديات
     const savedStickers = localStorage.getItem('kids_clock_stickers');
     this.unlockedStickers = new Set(savedStickers ? JSON.parse(savedStickers) : []);
 
     this.initDOM();
     this.bindEvents();
+    this.initStageClockDragging();
     this.renderStickerAlbum();
   }
 
@@ -47,6 +56,11 @@ class CartoonStoryEngine {
     // عناصر خشبة المسرح الكرتوني
     this.stageCanvasArea = document.getElementById('theaterStageArea');
     this.stageClockActor = document.getElementById('stageClockActor');
+    this.stageClockSvg = document.getElementById('stageClockSvg');
+    this.stageHourHand = document.getElementById('stageHourHand');
+    this.stageMinuteHand = document.getElementById('stageMinuteHand');
+    this.stageDigitalTime = document.getElementById('stageDigitalTime');
+
     this.actorTiktuk = document.getElementById('actorTiktuk');
     this.actorTurtle = document.getElementById('actorTurtle');
     this.actorBunny = document.getElementById('actorBunny');
@@ -58,6 +72,7 @@ class CartoonStoryEngine {
 
     // أزرار التحكم
     this.btnPlay = document.getElementById('theaterBtnPlay');
+    this.btnPlayText = document.getElementById('theaterPlayBtnText');
     this.btnReplay = document.getElementById('theaterBtnReplay');
     this.btnPrev = document.getElementById('theaterBtnPrev');
     this.btnNext = document.getElementById('theaterBtnNext');
@@ -67,6 +82,12 @@ class CartoonStoryEngine {
     this.btnTaskCheck = document.getElementById('btnTheaterTaskCheck');
     this.btnTaskHelp = document.getElementById('btnTheaterTaskHelp');
     this.taskResult = document.getElementById('taskZoneResult');
+
+    // أزرار الضبط السريع في المسرح
+    this.btnHourDown = document.getElementById('btnStageHourDown');
+    this.btnHourUp = document.getElementById('btnStageHourUp');
+    this.btnMinDown = document.getElementById('btnStageMinDown');
+    this.btnMinUp = document.getElementById('btnStageMinUp');
 
     // ألبوم الملصقات
     this.stickersAlbum = document.getElementById('stickersAlbumRow');
@@ -113,6 +134,61 @@ class CartoonStoryEngine {
       this.btnTaskHelp.addEventListener('click', () => this.helpChallenge());
     }
 
+    // تفاعل أزرار الضبط السريع (+- ساعة و +- دقيقة)
+    if (this.btnHourDown) {
+      this.btnHourDown.addEventListener('click', () => {
+        let h = this.stageHours - 1;
+        if (h < 1) h = 12;
+        this.setStageTime(h, this.stageMinutes, true);
+        if (window.app) window.app.playTickSound();
+      });
+    }
+    if (this.btnHourUp) {
+      this.btnHourUp.addEventListener('click', () => {
+        let h = this.stageHours + 1;
+        if (h > 12) h = 1;
+        this.setStageTime(h, this.stageMinutes, true);
+        if (window.app) window.app.playTickSound();
+      });
+    }
+    if (this.btnMinDown) {
+      this.btnMinDown.addEventListener('click', () => {
+        let m = this.stageMinutes - 15;
+        let h = this.stageHours;
+        if (m < 0) {
+          m += 60;
+          h = h - 1 < 1 ? 12 : h - 1;
+        }
+        this.setStageTime(h, m, true);
+        if (window.app) window.app.playTickSound();
+      });
+    }
+    if (this.btnMinUp) {
+      this.btnMinUp.addEventListener('click', () => {
+        let m = this.stageMinutes + 15;
+        let h = this.stageHours;
+        if (m >= 60) {
+          m -= 60;
+          h = h + 1 > 12 ? 1 : h + 1;
+        }
+        this.setStageTime(h, m, true);
+        if (window.app) window.app.playTickSound();
+      });
+    }
+
+    // النقر المباشر على أرقام وجه الساعة لتوجيه عقرب الساعات فوراً
+    const numButtons = document.querySelectorAll('.stage-num-btn');
+    numButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const hr = parseInt(btn.getAttribute('data-hour'), 10);
+        if (hr) {
+          this.setStageTime(hr, this.stageMinutes, true);
+          if (window.app) window.app.playTickSound();
+        }
+      });
+    });
+
     // زر تشغيل السينما من البانر في الصفحة الرئيسية
     const cinemaBanner = document.getElementById('openCartoonCinemaBanner');
     if (cinemaBanner) {
@@ -128,9 +204,93 @@ class CartoonStoryEngine {
     const tabStory = document.getElementById('tabLessons');
     if (tabStory) {
       tabStory.addEventListener('click', () => {
-        // فتح المسرح السينمائي فوراً عند اختيار التبويب لمزيد من المتعة
         setTimeout(() => this.openTheater(0), 150);
       });
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     تفاعل سحب وتحريك عقارب ساعة المسرح باللمس والماوس
+     -------------------------------------------------------------------------- */
+  initStageClockDragging() {
+    if (!this.stageClockSvg) return;
+
+    const getClockAngle = (clientX, clientY) => {
+      const rect = this.stageClockSvg.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = clientX - cx;
+      const dy = clientY - cy;
+      let deg = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+      if (deg < 0) deg += 360;
+      return deg;
+    };
+
+    const handleStart = (e) => {
+      const target = e.target.closest('#stageHourHand, #stageMinuteHand');
+      if (!target) return;
+
+      this.isDragging = true;
+      this.draggedHand = target.id === 'stageHourHand' ? 'hour' : 'minute';
+      e.preventDefault();
+      if (window.app) window.app.playTickSound();
+    };
+
+    const handleMove = (e) => {
+      if (!this.isDragging || !this.draggedHand) return;
+      e.preventDefault();
+
+      const touch = e.touches ? e.touches[0] : e;
+      const deg = getClockAngle(touch.clientX, touch.clientY);
+
+      if (this.draggedHand === 'hour') {
+        let hr = Math.round(deg / 30);
+        if (hr === 0) hr = 12;
+        this.setStageTime(hr, this.stageMinutes, true);
+      } else if (this.draggedHand === 'minute') {
+        let mn = Math.round(deg / 6) % 60;
+        this.setStageTime(this.stageHours, mn, true);
+      }
+    };
+
+    const handleEnd = () => {
+      if (this.isDragging) {
+        this.isDragging = false;
+        this.draggedHand = null;
+        if (window.app) window.app.playTickSound();
+      }
+    };
+
+    this.stageClockSvg.addEventListener('mousedown', handleStart);
+    this.stageClockSvg.addEventListener('touchstart', handleStart, { passive: false });
+
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('touchmove', handleMove, { passive: false });
+
+    window.addEventListener('mouseup', handleEnd);
+    window.addEventListener('touchend', handleEnd);
+  }
+
+  setStageTime(h, m, syncWithMain = true) {
+    this.stageHours = h;
+    this.stageMinutes = m;
+
+    const hDeg = ((h % 12) * 30) + (m * 0.5);
+    const mDeg = m * 6;
+
+    if (this.stageHourHand) this.stageHourHand.style.transform = `rotate(${hDeg}deg)`;
+    if (this.stageMinuteHand) this.stageMinuteHand.style.transform = `rotate(${mDeg}deg)`;
+
+    // تحديث الشارة الرقمية في المسرح
+    if (this.stageDigitalTime) {
+      const padH = String(h).padStart(2, '0');
+      const padM = String(m).padStart(2, '0');
+      this.stageDigitalTime.textContent = `${padH}:${padM}`;
+    }
+
+    // مزامنة مع التطبيق الرئيسي إذا كان متاحاً
+    if (syncWithMain && window.app) {
+      window.app.setTime(h, m, false);
     }
   }
 
@@ -155,6 +315,7 @@ class CartoonStoryEngine {
 
     this.episodes.forEach((ep, idx) => {
       const btn = document.createElement('button');
+      btn.type = 'button';
       btn.className = `episode-pill-tab ${idx === this.currentEpIndex ? 'active' : ''}`;
       const label = this.currentLang === 'ar' ? ep.badgeLabelAr : ep.badgeLabelEn;
       btn.innerHTML = `<span>${ep.icon}</span> <span>${label}</span>`;
@@ -184,10 +345,9 @@ class CartoonStoryEngine {
       this.stageCanvasArea.className = `theater-stage-canvas-area theme-${ep.theme}`;
     }
 
-    // ضبط الوقت في ساعة المسرح وفي التطبيق الرئيسي
-    if (window.app && ep.initialClock) {
-      window.app.setTime(ep.initialClock[0], ep.initialClock[1], true);
-      this.updateStageClock(ep.initialClock[0], ep.initialClock[1]);
+    // ضبط الوقت في ساعة المسرح
+    if (ep.initialClock) {
+      this.setStageTime(ep.initialClock[0], ep.initialClock[1], true);
     }
 
     // تجهيز بطاقة المهمة
@@ -196,45 +356,46 @@ class CartoonStoryEngine {
     }
     if (this.taskResult) {
       this.taskResult.style.display = 'none';
+      this.taskResult.textContent = '';
     }
 
-    // عرض أول مشهد حواري وتشغيله
+    // عرض أول مشهد حواري
     this.displayDialogue(0);
     this.renderStickerAlbum();
   }
 
   displayDialogue(diagIdx) {
     const ep = this.currentEpisode;
-    if (!ep.dialogues || !ep.dialogues[diagIdx]) return;
+    if (!ep || !ep.dialogues || !ep.dialogues[diagIdx]) return;
 
     this.currentDiagIndex = diagIdx;
     const diag = ep.dialogues[diagIdx];
 
     // تحديث الفقاعة
     const text = this.currentLang === 'ar' ? diag.textAr : diag.textEn;
-    const speakerName = this.currentLang === 'ar' ? diag.speakerNameAr : diag.speakerNameEn;
+    const rawSpeakerName = this.currentLang === 'ar' ? diag.speakerNameAr : diag.speakerNameEn;
+    // تنظيف اسم المتحدث من التكرار
+    const speakerClean = rawSpeakerName.replace(/⏰|🐢|🐇/g, '').trim();
 
     if (this.bubbleAvatar) {
       const avatars = { tiktuk: '⏰', turtle: '🐢', bunny: '🐇' };
       this.bubbleAvatar.textContent = avatars[diag.speaker] || '⏰';
     }
     if (this.bubbleText) {
-      this.bubbleText.innerHTML = `<strong>${speakerName}:</strong> ${text}`;
+      this.bubbleText.innerHTML = `<strong>${speakerClean}:</strong> ${text}`;
     }
 
-    // تحريك الشخصيات
+    // تحريك وتحديث ظهور الشخصيات في المشهد
     this.updateActorStates(diag.actorStates || {});
 
     // تحريك ساعة المسرح إذا كان هناك وقت محدد للمشهد
     if (diag.clockTime) {
-      if (window.app) window.app.setTime(diag.clockTime[0], diag.clockTime[1], true);
-      this.updateStageClock(diag.clockTime[0], diag.clockTime[1]);
+      this.setStageTime(diag.clockTime[0], diag.clockTime[1], true);
     }
 
     // نطق الحوار صوتياً
     if (window.app) {
       window.app.speakText(text, () => {
-        // عند انتهاء الصوت، الانتقال تلقائياً للمشهد التالي إذا كان المشغل في وضع التشغيل
         if (this.isPlaying) {
           this.timer = setTimeout(() => {
             if (this.currentDiagIndex + 1 < ep.dialogues.length) {
@@ -259,16 +420,6 @@ class CartoonStoryEngine {
     if (this.actorBunny) {
       this.actorBunny.className = `actor-character actor-bunny ${states.bunny || 'idle'}`;
     }
-  }
-
-  updateStageClock(h, m) {
-    if (!this.stageClockActor) return;
-    const hDeg = ((h % 12) * 30) + (m * 0.5);
-    const mDeg = m * 6;
-    const hHand = this.stageClockActor.querySelector('#stageHourHand');
-    const mHand = this.stageClockActor.querySelector('#stageMinuteHand');
-    if (hHand) hHand.style.transform = `rotate(${hDeg}deg)`;
-    if (mHand) mHand.style.transform = `rotate(${mDeg}deg)`;
   }
 
   playEpisode() {
@@ -311,13 +462,13 @@ class CartoonStoryEngine {
 
   checkChallenge() {
     const ep = this.currentEpisode;
-    if (!ep || !ep.challenge || !window.app) return;
+    if (!ep || !ep.challenge) return;
 
     let hMatch = true;
     if (ep.challenge.targetHour !== null) {
-      hMatch = window.app.currentHours === ep.challenge.targetHour;
+      hMatch = this.stageHours === ep.challenge.targetHour;
     }
-    const mDiff = Math.abs(window.app.currentMinutes - ep.challenge.targetMin);
+    const mDiff = Math.abs(this.stageMinutes - ep.challenge.targetMin);
     const mMatch = mDiff <= 2;
 
     if (hMatch && mMatch) {
@@ -329,12 +480,14 @@ class CartoonStoryEngine {
       }
 
       this.unlockSticker(ep.sticker.id);
-      window.app.playCelebrationFanfare();
-      window.app.launchFlyingBalloons(12);
-      window.app.triggerConfetti('center', 90);
+      if (window.app) {
+        window.app.playCelebrationFanfare();
+        window.app.launchFlyingBalloons(14);
+        window.app.triggerConfetti('center', 90);
+      }
 
       const msg = this.currentLang === 'ar' ? ep.challenge.successAr : ep.challenge.successEn;
-      window.app.speakText(msg);
+      if (window.app) window.app.speakText(msg);
     } else {
       if (this.taskResult) {
         this.taskResult.className = 'task-zone-result retry';
@@ -343,18 +496,17 @@ class CartoonStoryEngine {
           : `Almost there hero! Remember: ${ep.challenge.instructionEn}`;
         this.taskResult.style.display = 'block';
       }
-      window.app.playOopsSound();
+      if (window.app) window.app.playOopsSound();
     }
   }
 
   helpChallenge() {
     const ep = this.currentEpisode;
-    if (!ep || !ep.challenge || !window.app) return;
+    if (!ep || !ep.challenge) return;
 
-    const setH = ep.challenge.targetHour !== null ? ep.challenge.targetHour : window.app.currentHours;
-    window.app.setTime(setH, ep.challenge.targetMin, true);
-    this.updateStageClock(setH, ep.challenge.targetMin);
-    window.app.playChimeSound();
+    const setH = ep.challenge.targetHour !== null ? ep.challenge.targetHour : this.stageHours;
+    this.setStageTime(setH, ep.challenge.targetMin, true);
+    if (window.app) window.app.playChimeSound();
 
     if (this.taskResult) {
       this.taskResult.className = 'task-zone-result success';
@@ -365,7 +517,7 @@ class CartoonStoryEngine {
     }
 
     this.unlockSticker(ep.sticker.id);
-    window.app.playCelebrationFanfare();
+    if (window.app) window.app.playCelebrationFanfare();
   }
 
   unlockSticker(stickerId) {
